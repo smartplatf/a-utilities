@@ -84,10 +84,16 @@ public abstract class VMSingleton
     protected static Object getInstance(String cls, String creatorcls, String createmthd, Class[] prmcls, Object[] parms)
         throws CtxException
     {
+        ClassLoader syscl = VMSingleton.class.getClassLoader().getSystemClassLoader();
+        return getInstance(cls, creatorcls, createmthd, prmcls, parms, syscl);
+    }
+
+    protected static Object getInstance(String cls, String creatorcls, String createmthd, Class[] prmcls, Object[] parms, ClassLoader syscl)
+        throws CtxException
+    {
         Object ret = null;
         try
         {
-            ClassLoader syscl = VMSingleton.class.getClassLoader().getSystemClassLoader();
             CrossLinkAny myclscl = new CrossLinkAny(cls, syscl);
             ret = myclscl.invoke("getSingleInstance");
             if (ret == null)

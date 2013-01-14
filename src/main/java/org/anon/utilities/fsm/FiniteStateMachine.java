@@ -90,7 +90,7 @@ public class FiniteStateMachine
         throws CtxException
     {
         assertion().assertNotNull(entity, "Cannot transition a null entity.");
-        assertion().assertEquals(entity.stateEntityType(), _stateEntityType, "The type of the object is not the same as this state machine: " + entity.stateEntityType() + ":" + _stateEntityType);
+        assertion().assertEquals(entity.utilities___stateEntityType(), _stateEntityType, "The type of the object is not the same as this state machine: " + entity.utilities___stateEntityType() + ":" + _stateEntityType);
         FiniteStateGraph graph = _states.get(name);
         assertion().assertNotNull(graph, "Not a valid state: " + name);
         graph.transitionToMe(entity);
@@ -100,7 +100,7 @@ public class FiniteStateMachine
         throws CtxException
     {
         assertion().assertNotNull(entity, "Cannot start a null entity.");
-        assertion().assertEquals(entity.stateEntityType(), _stateEntityType, "The type of the object is not the same as this state machine: " + entity.stateEntityType() + ":" + _stateEntityType);
+        assertion().assertEquals(entity.utilities___stateEntityType(), _stateEntityType, "The type of the object is not the same as this state machine: " + entity.utilities___stateEntityType() + ":" + _stateEntityType);
         assertion().assertNotNull(_startState, "No valid start states found ");
         _startState.transitionToMe(entity);
     }
@@ -108,7 +108,7 @@ public class FiniteStateMachine
     public boolean isDead(StateEntity entity)
         throws CtxException
     {
-        FiniteState state = entity.currentState();
+        FiniteState state = entity.utilities___currentState();
         boolean ret = ((state != null) && (state.finalState()));
         return ret;
     }

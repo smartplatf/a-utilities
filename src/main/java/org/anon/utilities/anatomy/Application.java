@@ -46,8 +46,20 @@ import org.anon.utilities.exception.CtxException;
 
 public class Application extends VMSingleton
 {
+    private ClassLoader _startLoader;
+
     public Application()
     {
+    }
+
+    public void setStartLoader(ClassLoader ldr)
+    {
+        _startLoader = ldr;
+    }
+
+    public ClassLoader getStartLoader()
+    {
+        return _startLoader;
     }
 
     public static Application getApplication()

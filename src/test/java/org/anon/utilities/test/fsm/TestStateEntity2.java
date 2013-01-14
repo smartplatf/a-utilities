@@ -65,13 +65,13 @@ public class TestStateEntity2 extends BaseStateEntity
             _stateEntityType = "TestInnerStateEntity";
         }
 
-        public StateEntity parent()
+        public StateEntity utilities___parent()
             throws CtxException
         {
             return _parent;
         }
 
-        public StateEntity[] children(String setype)
+        public StateEntity[] utilities___children(String setype)
             throws CtxException
         {
             return null;
@@ -98,13 +98,13 @@ public class TestStateEntity2 extends BaseStateEntity
 
     public TestInnerStateEntity innerentity() { return _entity; }
 
-    public StateEntity parent()
+    public StateEntity utilities___parent()
         throws CtxException
     {
         return null;
     }
 
-    public StateEntity[] children(String setype)
+    public StateEntity[] utilities___children(String setype)
         throws CtxException
     {
         if (setype.equals("TestStateEntity"))

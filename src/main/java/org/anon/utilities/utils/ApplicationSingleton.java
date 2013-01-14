@@ -1,17 +1,17 @@
 /**
- * Utilities - Utilities used by anon
+ * SMART - State Machine ARchiTecture
  *
  * Copyright (C) 2012 Individual contributors as indicated by
  * the @authors tag
  *
- * This file is a part of Utilities.
+ * This file is a part of SMART.
  *
- * Utilities is a free software: you can redistribute it and/or modify
+ * SMART is a free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Utilities is distributed in the hope that it will be useful,
+ * SMART is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -26,47 +26,44 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.fsm.TestStateEntity
+ * File:                org.anon.utilities.utils.ApplicationSingleton
  * Author:              rsankar
  * Revision:            1.0
- * Date:                09-08-2012
+ * Date:                13-01-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A testing state entity
+ * A VMSingleton that is maintained in app start classloader
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.fsm;
+package org.anon.utilities.utils;
 
-import org.anon.utilities.fsm.StateEntity;
+import org.anon.utilities.anatomy.Application;
 import org.anon.utilities.exception.CtxException;
 
-public class TestStateEntity extends BaseStateEntity
+public abstract class ApplicationSingleton extends VMSingleton
 {
-    public TestStateEntity()
-        throws CtxException
+    protected ApplicationSingleton()
     {
-        super();
     }
 
-    protected void initStateEntityType()
-    {
-        _stateEntityType = "TestStateEntity";
-    }
-
-    public StateEntity utilities___parent()
+    protected static Object getAppInstance(String cls, String creatorcls, String createmthd, Class[] prmcls, Object[] parms)
         throws CtxException
     {
-        return null;
+        ClassLoader syscl = Application.getApplication().getStartLoader();
+        if (syscl == null)
+            syscl = ApplicationSingleton.class.getClassLoader().getSystemClassLoader();
+
+        return getInstance(cls, creatorcls, createmthd, prmcls, parms, syscl);
     }
 
-    public StateEntity[] utilities___children(String setype)
+    protected static Object getAppInstance(String cls)
         throws CtxException
     {
-        return null;
+        return getAppInstance(cls, "org.anon.utilities.utils.DefaultVMSCreator", "createVMS", new Class[] { String.class }, new Object[] { cls });
     }
 }
 

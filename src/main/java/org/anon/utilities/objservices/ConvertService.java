@@ -59,6 +59,7 @@ import static org.anon.utilities.services.ServiceLocator.*;
 
 import org.anon.utilities.lang.Translator;
 import org.anon.utilities.lang.json.JSONTranslator;
+import org.anon.utilities.verify.VerifiableObject;
 import org.anon.utilities.reflect.CreatorFromMap;
 import org.anon.utilities.reflect.ClassTraversal;
 import org.anon.utilities.exception.CtxException;
@@ -258,6 +259,15 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         return clazz.cast(ret);
     }
 
+    public <T extends VerifiableObject> T mapToVerifiedObject(Class<T> clazz, Map values)
+        throws CtxException
+    {
+        VerifiableObject o = mapToObject(clazz, values);
+        if (!o.verify())
+            except().te(o, "Object cannot be verified.");
+        return clazz.cast(o);
+    }
+
     public void writeObject(Object obj, OutputStream ostr, translator t)
         throws CtxException
     {
@@ -268,6 +278,15 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         throws CtxException
     {
         return t.translatorFor().translate(istr, cls);
+    }
+
+    public <T extends VerifiableObject> T readVerifiedObject(InputStream istr, Class<T> cls, translator t)
+        throws CtxException
+    {
+        VerifiableObject o = readObject(istr, cls, t);
+        if (!o.verify())
+            except().te(o, "Object cannot be verified");
+        return cls.cast(o);
     }
 }
 
