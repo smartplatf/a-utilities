@@ -26,58 +26,27 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.fsm.BaseStateEntity
+ * File:                org.anon.utilities.verify.VerifiableObject
  * Author:              rsankar
  * Revision:            1.0
- * Date:                09-08-2012
+ * Date:                13-01-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A base class for stateentity
+ * An interface to be implemented by objects that need to be verified
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.fsm;
+package org.anon.utilities.verify;
 
-import static org.anon.utilities.objservices.ObjectServiceLocator.*;
-import org.anon.utilities.fsm.StateEntity;
-import org.anon.utilities.fsm.FiniteState;
-import org.anon.utilities.fsm.FiniteStateMachine;
 import org.anon.utilities.exception.CtxException;
 
-public abstract class BaseStateEntity implements StateEntity
+public interface VerifiableObject
 {
-    protected String _stateEntityType;
-
-    private FiniteState _currentState;
-
-    public BaseStateEntity()
-        throws CtxException
-    {
-        initStateEntityType();
-        FiniteStateMachine mc = fsm().fsm(_stateEntityType);
-        if (mc != null) mc.start(this);
-    }
-
-    public String utilities___stateEntityType()
-    {
-        return _stateEntityType;
-    }
-
-    public void utilities___setCurrentState(FiniteState state)
-    {
-        _currentState = state;
-    }
-
-    public FiniteState utilities___currentState() { return _currentState; }
-
-    protected abstract void initStateEntityType();
-    public abstract StateEntity utilities___parent()
-        throws CtxException;
-
-    public abstract StateEntity[] utilities___children(String setype)
+    public boolean isVerified();
+    public boolean verify()
         throws CtxException;
 }
 
