@@ -1,17 +1,17 @@
 /**
- * SMART - State Machine ARchiTecture
+ * Utilities - Utilities used by anon
  *
  * Copyright (C) 2012 Individual contributors as indicated by
  * the @authors tag
  *
- * This file is a part of SMART.
+ * This file is a part of Utilities.
  *
- * SMART is a free software: you can redistribute it and/or modify
+ * Utilities is a free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * SMART is distributed in the hope that it will be useful,
+ * Utilities is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -53,7 +53,7 @@ public class CThread extends Thread
     private RuntimeContext _runtime;
     private Map<String, Object> _contextLocals;
 
-    public CThread(String group, String name, CtxRunnable run)
+    public CThread(String group, String name, Runnable run)
     {
         super(new ThreadGroup(name + "_" + group), run);
     }
