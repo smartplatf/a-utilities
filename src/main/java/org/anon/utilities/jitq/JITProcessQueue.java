@@ -58,7 +58,8 @@ public interface JITProcessQueue
 
     public Object associatedTo();
 
-    public boolean add(Object data);
+    public boolean add(Object data)
+        throws CtxException;
 
     public Object poll();
 
