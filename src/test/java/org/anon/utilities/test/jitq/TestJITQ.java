@@ -64,12 +64,12 @@ public class TestJITQ
         for (int i = 0; i < 10; i++)
             q.add("test-Message" + i);
 
-        jitq().processJITQueue(q);
+        //jitq().processJITQueue(q);
         System.out.println("started processing");
         Thread.currentThread().sleep(1000);
         for (int i = 11; i < 20; i++)
             q.add("test2-Message" + i);
-        jitq().processJITQueue(q);
+        //jitq().processJITQueue(q);
         System.out.println("started processing");
         Thread.currentThread().sleep(5);
     }
@@ -86,12 +86,12 @@ public class TestJITQ
         for (int i = 0; i < 10; i++)
             q.add("cont-Message" + i);
 
-        jitq().processJITQueue(q);
+        //jitq().processJITQueue(q);
         System.out.println("cont - started processing");
         for (int i = 11; i < 20; i++)
         {
             q.add("cont-Message" + i);
-            jitq().processJITQueue(q);
+            //jitq().processJITQueue(q);
             System.out.println("cont - started processing");
         }
         Thread.currentThread().sleep(1000);

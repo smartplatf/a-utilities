@@ -164,12 +164,17 @@ public class ReflectionService extends ServiceLocator.Service
         return fld;
     }
 
-    public Field getAnnotatedField(Class cls, Class annotate)
+    public Field getAnnotatedField(Class cls, Class annotatein)
         throws CtxException
     {
         Field fld = null;
         try
         {
+            Class annotate = annotatein;
+            if (!annotatein.getClassLoader().equals(cls.getClassLoader()))
+            {
+                annotate = cls.getClassLoader().loadClass(annotatein.getName());
+            }
             Field[] flds = cls.getDeclaredFields();
             for (int i = 0; i < flds.length; i++)
             {
@@ -185,17 +190,22 @@ public class ReflectionService extends ServiceLocator.Service
         }
         catch (Exception e)
         {
-            except().rt(e, new CtxException.Context("AnnotateField: " + annotate.getName() + ":" + cls.getName(), e.getMessage()));
+            except().rt(e, new CtxException.Context("AnnotateField: " + annotatein.getName() + ":" + cls.getName(), e.getMessage()));
         }
         return fld;
     }
 
-    public Field[] getAnnotatedFields(Class cls, Class annotate)
+    public Field[] getAnnotatedFields(Class cls, Class annotatein)
         throws CtxException
     {
         List<Field> ret = new ArrayList<Field>();
         try
         {
+            Class annotate = annotatein;
+            if (!annotatein.getClassLoader().equals(cls.getClassLoader()))
+            {
+                annotate = cls.getClassLoader().loadClass(annotatein.getName());
+            }
             Field[] flds = cls.getDeclaredFields();
             for (int i = 0; i < flds.length; i++)
             {
@@ -214,7 +224,7 @@ public class ReflectionService extends ServiceLocator.Service
         }
         catch (Exception e)
         {
-            except().rt(e, new CtxException.Context("AnnotatedFields: " + annotate.getName() + ":" + cls.getName(), e.getMessage()));
+            except().rt(e, new CtxException.Context("AnnotatedFields: " + annotatein.getName() + ":" + cls.getName(), e.getMessage()));
         }
         return ret.toArray(new Field[0]);
     }

@@ -52,8 +52,16 @@ public class RelatedUtils
         if (obj == null)
             return null;
 
+        return getRelatedObjectForClass(obj.getClass());
+    }
+
+    public static Object getRelatedObjectForClass(Class cls)
+    {
+        if (cls == null)
+            return null;
+
         Object ret = null;
-        ClassLoader ldr = obj.getClass().getClassLoader();
+        ClassLoader ldr = cls.getClassLoader();
         if (ldr instanceof RelatedLoader)
         {
             RelatedLoader rldr = (RelatedLoader)ldr;

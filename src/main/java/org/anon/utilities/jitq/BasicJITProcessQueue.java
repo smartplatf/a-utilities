@@ -44,13 +44,16 @@ package org.anon.utilities.jitq;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static org.anon.utilities.objservices.ObjectServiceLocator.*;
+
 import org.anon.utilities.exception.CtxException;
 
-public class BasicJITProcessQueue extends ConcurrentLinkedQueue<Object> implements JITProcessQueue
+public class BasicJITProcessQueue implements JITProcessQueue
 {
     private static final int NOT_PROCESSING = 0;
     private static final int PROCESSING = 1;
 
+    private ConcurrentLinkedQueue<Object> _queue;
     private Object _associatedTo;
     private DataListener _listener;
     private AtomicInteger _processing;
@@ -58,6 +61,7 @@ public class BasicJITProcessQueue extends ConcurrentLinkedQueue<Object> implemen
 
     public BasicJITProcessQueue(String group, Object associated, DataListener listener)
     {
+        _queue = new ConcurrentLinkedQueue<Object>();
         _associatedTo = associated;
         _listener = listener;
         _processing = new AtomicInteger(NOT_PROCESSING);
@@ -93,18 +97,21 @@ public class BasicJITProcessQueue extends ConcurrentLinkedQueue<Object> implemen
     }
 
     public boolean add(Object data)
+        throws CtxException
     {
-        return super.add(data);
+        boolean ret = _queue.add(data);
+        jitq().processJITQueue(this);
+        return ret;
     }
 
     public Object poll()
     {
-        return super.poll();
+        return _queue.poll();
     }
 
     public boolean isEmpty()
     {
-        return super.isEmpty();
+        return _queue.isEmpty();
     }
 
     public String belongsTo()
