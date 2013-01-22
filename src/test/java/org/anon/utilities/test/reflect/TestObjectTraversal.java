@@ -508,6 +508,29 @@ public class TestObjectTraversal
     }
 
     @Test
+    public void testcreateMap()
+        throws Exception
+    {
+        System.out.println("Starting createMap.");
+        ComplexTestObject cobj = new ComplexTestObject();
+        Map m = convert().objectToMap(cobj);
+        System.out.println(m);
+        ListTestObject lobj = new ListTestObject(2);
+        m = convert().objectToMap(lobj);
+        //System.out.println(m);
+        assertTrue(m.containsKey("_simpleObjs"));
+        assertTrue(m.containsKey("_complexObjs"));
+        assertTrue(m.containsKey("_listObjs"));
+        assertTrue(m.get("_simpleObjs") instanceof List);
+        assertTrue(m.get("_complexObjs") instanceof List);
+        assertTrue(m.get("_listObjs") instanceof List);
+        assertTrue(((List)m.get("_simpleObjs")).size() == 100);
+        assertTrue(((List)m.get("_complexObjs")).size() == 100);
+        assertTrue(((List)m.get("_listObjs")).size() == 100);
+        System.out.println("Ended createMap.");
+    }
+
+    @Test
     public void testdirtyFieldTraversal()
         throws Exception
     {

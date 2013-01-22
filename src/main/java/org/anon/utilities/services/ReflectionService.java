@@ -132,6 +132,24 @@ public class ReflectionService extends ServiceLocator.Service
         return fld;
     }
 
+    public Object getAnyFieldValue(Class cls, Object obj, String attr)
+        throws CtxException
+    {
+        Field fld = getAnyField(cls, attr);
+        assertion().assertNotNull(fld, "Cannot find field: " + attr + " in " + cls.getName());
+        try
+        {
+            fld.setAccessible(true);
+            return fld.get(obj);
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("Field: " + attr + ":" + cls.getName() + ":", e.getMessage()));
+        }
+
+        return null;
+    }
+
     public Field getAnnotatedField(Class cls, String anonCls)
         throws CtxException
     {

@@ -68,10 +68,12 @@ public class RelatedLoader extends URLClassLoader implements ResourceFinder, Res
         addForceLoadSuper("java.*");
         addForceLoadSuper("javax.*");
         addForceLoadSuper("sun.*");
+        addForceLoadSuper("org.apache.log4j.*");
         addForceLoadSuper("org.anon.utilities.exception.*");
         addForceLoadSuper("org.anon.utilities.logger.*");
         addForceLoadSuper("org.anon.utilities.services.*");
         addForceLoadSuper("org.anon.utilities.perfstat.*");
+        addForceLoadSuper("org.anon.utilities.loader.RelatedLoader");
     }
 
     class foundClass
@@ -103,6 +105,20 @@ public class RelatedLoader extends URLClassLoader implements ResourceFinder, Res
         throws CtxException
     {
         _initComps = comps;
+        try
+        {
+            Class cls = this.loadClass("org.anon.utilities.anatomy.AModule");
+            Object parent = null;
+            for (int i = 0;  (comps != null) && (i < comps.length); i++)
+            {
+                Class comp = this.loadClass(comps[i]); //full path with package and all.
+                parent = comp.getConstructor(cls).newInstance(parent);
+            }
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("Error in initialization of comps", "Exception"));
+        }
     }
 
     public void setRelatedTo(Object obj)

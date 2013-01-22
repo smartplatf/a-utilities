@@ -121,6 +121,10 @@ public class DataContext
     {
         try
         {
+            //for primitives do not set null.
+            if ((obj == null) && (_field != null) && (type().checkPrimitive(_field.getType())))
+                return;
+
             if ((_field != null) && (_primaryObject != null))
                 _field.set(_primaryObject, obj);
         }

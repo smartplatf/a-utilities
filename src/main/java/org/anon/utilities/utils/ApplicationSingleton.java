@@ -41,7 +41,7 @@
 
 package org.anon.utilities.utils;
 
-import org.anon.utilities.anatomy.Application;
+import org.anon.utilities.anatomy.CrossLinkApplication;
 import org.anon.utilities.exception.CtxException;
 
 public abstract class ApplicationSingleton extends VMSingleton
@@ -53,7 +53,7 @@ public abstract class ApplicationSingleton extends VMSingleton
     protected static Object getAppInstance(String cls, String creatorcls, String createmthd, Class[] prmcls, Object[] parms)
         throws CtxException
     {
-        ClassLoader syscl = Application.getApplication().getStartLoader();
+        ClassLoader syscl = CrossLinkApplication.getApplication().getStartLoader();
         if (syscl == null)
             syscl = ApplicationSingleton.class.getClassLoader().getSystemClassLoader();
 
