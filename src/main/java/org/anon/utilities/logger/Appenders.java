@@ -60,7 +60,7 @@ public class Appenders
         String tmpdir = System.getProperty("user.dir");
         tmpdir += "/logs/";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return tmpdir + "EcoFabric-" + name + "-Logs-" + format.format(dt) + ".log";
+        return tmpdir + "Utilities-" + name + "-Logs-" + format.format(dt) + ".log";
     }
 
     static void addAppenders(String grp, LogProvider provider)
