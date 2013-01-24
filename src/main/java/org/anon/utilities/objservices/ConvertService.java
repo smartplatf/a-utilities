@@ -281,7 +281,7 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         throws CtxException
     {
         VerifiableObject o = mapToObject(clazz, values);
-        if (!o.verify())
+        if ((o != null) && (!o.verify()))
             except().te(o, "Object cannot be verified.");
         return clazz.cast(o);
     }
