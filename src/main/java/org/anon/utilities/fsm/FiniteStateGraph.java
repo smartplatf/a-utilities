@@ -84,26 +84,26 @@ public final class FiniteStateGraph
     private void transitionDependant(StateEntity entity, String state)
         throws CtxException
     {
-        FiniteStateMachine mc = fsm().fsm(entity.stateEntityType());
-        assertion().assertNotNull(mc, "No state machine found for statetype: " + entity.stateEntityType());
+        FiniteStateMachine mc = fsm().fsm(entity.utilities___stateEntityType());
+        assertion().assertNotNull(mc, "No state machine found for statetype: " + entity.utilities___stateEntityType());
         mc.transition(entity, state);
     }
 
     public void transitionToMe(StateEntity entity)
         throws CtxException
     {
-        entity.setCurrentState(_state);
-        StateEntity parent = entity.parent();
-        if ((parent != null) && (_parentTransition.containsKey(parent.stateEntityType())))
+        entity.utilities___setCurrentState(_state);
+        StateEntity parent = entity.utilities___parent();
+        if ((parent != null) && (_parentTransition.containsKey(parent.utilities___stateEntityType())))
         {
-            String state = _parentTransition.get(parent.stateEntityType());
+            String state = _parentTransition.get(parent.utilities___stateEntityType());
             transitionDependant(parent, state);
         }
 
         for (String type : _childTransition.keySet())
         {
             String state = _childTransition.get(type);
-            StateEntity[] children = entity.children(type);
+            StateEntity[] children = entity.utilities___children(type);
             for (int i = 0; (children != null) && (i < children.length); i++)
                 transitionDependant(children[i], state);
         }

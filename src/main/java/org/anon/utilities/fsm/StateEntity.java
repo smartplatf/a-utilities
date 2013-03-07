@@ -45,15 +45,15 @@ import org.anon.utilities.exception.CtxException;
 
 public interface StateEntity
 {
-    public String stateEntityType();
+    public String utilities___stateEntityType();
 
-    public void setCurrentState(FiniteState state);
-    public FiniteState currentState();
+    public void utilities___setCurrentState(FiniteState state);
+    public FiniteState utilities___currentState();
 
-    public StateEntity parent()
+    public StateEntity utilities___parent()
         throws CtxException;
 
-    public StateEntity[] children(String setype)
+    public StateEntity[] utilities___children(String setype)
         throws CtxException;
 }
 

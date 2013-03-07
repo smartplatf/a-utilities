@@ -61,23 +61,23 @@ public abstract class BaseStateEntity implements StateEntity
         if (mc != null) mc.start(this);
     }
 
-    public String stateEntityType()
+    public String utilities___stateEntityType()
     {
         return _stateEntityType;
     }
 
-    public void setCurrentState(FiniteState state)
+    public void utilities___setCurrentState(FiniteState state)
     {
         _currentState = state;
     }
 
-    public FiniteState currentState() { return _currentState; }
+    public FiniteState utilities___currentState() { return _currentState; }
 
     protected abstract void initStateEntityType();
-    public abstract StateEntity parent()
+    public abstract StateEntity utilities___parent()
         throws CtxException;
 
-    public abstract StateEntity[] children(String setype)
+    public abstract StateEntity[] utilities___children(String setype)
         throws CtxException;
 }
 

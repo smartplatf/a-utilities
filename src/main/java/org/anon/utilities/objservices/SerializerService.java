@@ -1,17 +1,17 @@
 /**
- * SMART - State Machine ARchiTecture
+ * Utilities - Utilities used by anon
  *
  * Copyright (C) 2012 Individual contributors as indicated by
  * the @authors tag
  *
- * This file is a part of SMART.
+ * This file is a part of Utilities.
  *
- * SMART is a free software: you can redistribute it and/or modify
+ * Utilities is a free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * SMART is distributed in the hope that it will be useful,
+ * Utilities is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -47,11 +47,14 @@ import java.io.OutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 
 import static org.anon.utilities.services.ServiceLocator.*;
 import org.anon.utilities.serialize.Serializer;
 import org.anon.utilities.serialize.AObjectInputStream;
 import org.anon.utilities.serialize.AObjectOutputStream;
+import org.anon.utilities.serialize.LoaderResolver;
+import org.anon.utilities.serialize.DefaultLoaderResolver;
 import org.anon.utilities.serialize.SerializerFactory;
 import org.anon.utilities.serialize.srdr.DirtyField;
 import org.anon.utilities.serialize.srdr.SerialStreamReader;
@@ -189,6 +192,33 @@ public class SerializerService extends ObjectServiceLocator.ObjectService
         catch (Exception e)
         {
             except().rt(e, new CtxException.Context("SerializerService.serialize", "Exception"));
+        }
+
+        return null;
+    }
+
+    public Object cloneIn(Object obj, ClassLoader ldr)
+        throws CtxException
+    {
+        try
+        {
+            ByteArrayOutputStream str = new ByteArrayOutputStream();
+            serialize(str, obj);
+            byte[] streamed = str.toByteArray();
+            str.close();
+
+            ByteArrayInputStream bstr = new ByteArrayInputStream(streamed);
+            LoaderResolver resolve = new DefaultLoaderResolver(ldr);
+            ObjectInputStream istr = new AObjectInputStream(bstr, resolve);
+            Object ret = istr.readObject();
+            bstr.close();
+            istr.close();
+
+            return ret;
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("SerializerService.cloneIn", "Exception"));
         }
 
         return null;

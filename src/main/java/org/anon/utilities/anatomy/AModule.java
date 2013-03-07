@@ -48,10 +48,11 @@ import org.anon.utilities.exception.CtxException;
 public abstract class AModule implements Repeatable
 {
     private String _modName;
-    private AModule _parent;
     private AModule _child;
-    private ModuleContext _context;
     private StartConfig _config;
+
+    protected AModule _parent;
+    protected ModuleContext _context;
 
     protected AModule(AModule parent, ModuleContext ctx, boolean deflt)
         throws CtxException

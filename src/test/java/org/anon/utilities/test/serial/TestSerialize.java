@@ -42,6 +42,7 @@
 
 package org.anon.utilities.test.serial;
 
+import java.net.URL;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
@@ -49,6 +50,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import org.anon.utilities.logger.Logger;
+import org.anon.utilities.loader.RelatedLoader;
+import org.anon.utilities.test.PathHelper;
 
 import static org.anon.utilities.services.ServiceLocator.*;
 import static org.anon.utilities.objservices.ObjectServiceLocator.*;
@@ -99,6 +102,23 @@ public class TestSerialize
             boolean same = serial().same(sobj1, sobj3);
         }
         perf().dumpHere(log);
+    }
+
+    @Test
+    public void testClone()
+        throws Exception
+    {
+        SimpleTestObject sobj1 = new SimpleTestObject(0);
+        URL[] urls = new URL[]
+        {
+            new URL(PathHelper.getProjectBuildPath()),
+            new URL(PathHelper.getProjectTestBuildPath())
+        };
+        RelatedLoader ldr = new RelatedLoader(urls, new String[] {});
+        System.out.println("Starting Clone test...");
+        Object obj = serial().cloneIn(sobj1, ldr);
+        System.out.println("Cloned object: " + obj + ":" + obj.getClass().getClassLoader());
+        assertTrue(obj.getClass().getClassLoader().equals(ldr));
     }
 }
 
