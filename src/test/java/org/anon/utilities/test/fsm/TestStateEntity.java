@@ -57,13 +57,13 @@ public class TestStateEntity extends BaseStateEntity
         _stateEntityType = "TestStateEntity";
     }
 
-    public StateEntity parent()
+    public StateEntity utilities___parent()
         throws CtxException
     {
         return null;
     }
 
-    public StateEntity[] children(String setype)
+    public StateEntity[] utilities___children(String setype)
         throws CtxException
     {
         return null;

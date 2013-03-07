@@ -44,6 +44,8 @@ package org.anon.utilities.objservices;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.anon.utilities.codecontrol.CodeControl;
+
 public class ObjectServiceLocator
 {
     public abstract static class ObjectService
@@ -67,6 +69,7 @@ public class ObjectServiceLocator
     private static final String ANATOMYSVC = "org.anon.utilities.objservices.AnatomyService";
     private static final String LOADERSVC = "org.anon.utilities.objservices.LoaderService";
     private static final String JITQSVC = "org.anon.utilities.objservices.JITQueueService";
+    private static final String CODECTRL = "org.anon.utilities.codecontrol.CodeControl";
 
     static
     {
@@ -81,6 +84,7 @@ public class ObjectServiceLocator
         new LoaderService();
         new JITQueueService();
         new ExecutorService();
+        new CodeControl();
     }
 
     private ObjectServiceLocator()
@@ -140,6 +144,11 @@ public class ObjectServiceLocator
     public static JITQueueService jitq()
     {
         return (JITQueueService)OBJECTSERVICES.get(JITQSVC);
+    }
+
+    public static CodeControl control()
+    {
+        return (CodeControl)OBJECTSERVICES.get(CODECTRL);
     }
 }
 

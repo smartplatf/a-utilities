@@ -43,17 +43,19 @@ package org.anon.utilities.codecontrol;
 
 import java.security.Permission;
 
-public class CodeControl
+import org.anon.utilities.objservices.ObjectServiceLocator;
+
+public class CodeControl extends ObjectServiceLocator.ObjectService
 {
     //Throws this exception when exit is used in the code
-    public static class ExitTrappedException extends SecurityException {}
+    public class ExitTrappedException extends SecurityException {}
 
     /**
      * This class provides the security manager that overrides the checkExit call.
      * If the exit is called, this throws the ExitTrappedException. 
      *
      * */
-    public static class StopExitSecurityManager extends SecurityManager
+    public class StopExitSecurityManager extends SecurityManager
     {
         private SecurityManager _prevMgr = System.getSecurityManager();
 
@@ -71,8 +73,9 @@ public class CodeControl
     }
 
     //this class cannot be created.
-    private CodeControl()
+    public CodeControl()
     {
+        super();
     }
 
     /**
@@ -81,7 +84,7 @@ public class CodeControl
      * function. THis sets up the security manager for the piece of code as the StopExitSecurityManager
      *
      * */
-    public static void forbidSystemExitCall() 
+    public void disableSystemExit() 
     {
         SecurityManager securityManager = new StopExitSecurityManager();
         System.setSecurityManager(securityManager) ;
@@ -92,7 +95,7 @@ public class CodeControl
      * security manager. Please note, if the forbidSystemExitCall was not called to stop exit
      * calls, this does not do anything by set the security manager to null.
      * */
-    public static void enableSystemExitCall() 
+    public void enableSystemExit() 
     {
         SecurityManager mgr = System.getSecurityManager();
         if ((mgr != null) && (mgr instanceof StopExitSecurityManager))

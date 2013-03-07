@@ -73,31 +73,31 @@ public class TestFSM
 
         TestStateEntity tsm = new TestStateEntity();
         //mc.transition(tsm, "start");
-        assertTrue(tsm.currentState() != null);
-        assertTrue(tsm.currentState().stateName().equals("start"));
-        System.out.println(tsm.currentState());
+        assertTrue(tsm.utilities___currentState() != null);
+        assertTrue(tsm.utilities___currentState().stateName().equals("start"));
+        System.out.println(tsm.utilities___currentState());
         mc.transition(tsm, "state1");
-        assertTrue(tsm.currentState() != null);
-        assertTrue(tsm.currentState().stateName().equals("state1"));
-        System.out.println(tsm.currentState());
+        assertTrue(tsm.utilities___currentState() != null);
+        assertTrue(tsm.utilities___currentState().stateName().equals("state1"));
+        System.out.println(tsm.utilities___currentState());
         mc.transition(tsm, "state2");
-        assertTrue(tsm.currentState() != null);
-        assertTrue(tsm.currentState().stateName().equals("state2"));
-        System.out.println(tsm.currentState());
+        assertTrue(tsm.utilities___currentState() != null);
+        assertTrue(tsm.utilities___currentState().stateName().equals("state2"));
+        System.out.println(tsm.utilities___currentState());
     }
 
     public void assertEntity2(TestStateEntity2 entity2, String st2, String st1)
         throws Exception
     {
-        assertTrue(entity2.currentState() != null);
-        assertTrue(entity2.currentState().stateName().equals(st2));
+        assertTrue(entity2.utilities___currentState() != null);
+        assertTrue(entity2.utilities___currentState().stateName().equals(st2));
 
-        StateEntity[] children = entity2.children("TestStateEntity");
+        StateEntity[] children = entity2.utilities___children("TestStateEntity");
         assertTrue(children != null);
         for (int i = 0; i < children.length; i++)
         {
-            assertTrue(children[i].currentState() != null);
-            assertTrue(children[i].currentState().stateName().equals(st1));
+            assertTrue(children[i].utilities___currentState() != null);
+            assertTrue(children[i].utilities___currentState().stateName().equals(st1));
         }
     }
 
@@ -132,7 +132,7 @@ public class TestFSM
         assertEntity2(entity2, "state22", "state2");
 
         assertTrue(mc.isDead(entity2));
-        StateEntity[] children = entity2.children("TestStateEntity");
+        StateEntity[] children = entity2.utilities___children("TestStateEntity");
         assertTrue(children != null);
         for (int i = 0; i < children.length; i++)
         {
@@ -166,24 +166,24 @@ public class TestFSM
 
         TestStateEntity2 entity2 = new TestStateEntity2();
         TestStateEntity2.TestInnerStateEntity withpar = entity2.innerentity();
-        assertTrue(withpar.currentState() != null);
-        assertTrue(withpar.currentState().stateName().equals("istart2"));
+        assertTrue(withpar.utilities___currentState() != null);
+        assertTrue(withpar.utilities___currentState().stateName().equals("istart2"));
 
         assertEntity2(entity2, "start2", "start");
         mc2.transition(withpar, "istate21");
 
-        assertTrue(withpar.currentState() != null);
-        assertTrue(withpar.currentState().stateName().equals("istate21"));
+        assertTrue(withpar.utilities___currentState() != null);
+        assertTrue(withpar.utilities___currentState().stateName().equals("istate21"));
         assertEntity2(entity2, "state21", "state1");
 
         mc2.transition(withpar, "istate22");
-        assertTrue(withpar.currentState() != null);
-        assertTrue(withpar.currentState().stateName().equals("istate22"));
+        assertTrue(withpar.utilities___currentState() != null);
+        assertTrue(withpar.utilities___currentState().stateName().equals("istate22"));
         assertEntity2(entity2, "state22", "state2");
 
         assertTrue(mc2.isDead(withpar));
         assertTrue(mc.isDead(entity2));
-        StateEntity[] children = entity2.children("TestStateEntity");
+        StateEntity[] children = entity2.utilities___children("TestStateEntity");
         assertTrue(children != null);
         for (int i = 0; i < children.length; i++)
         {
