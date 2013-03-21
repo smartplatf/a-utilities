@@ -53,14 +53,10 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.math.BigDecimal;
 
-import javax.lang.model.type.PrimitiveType;
 
 import org.apache.commons.lang.ClassUtils;
 
-import com.google.common.primitives.Chars;
-import com.google.common.primitives.Doubles;
-import com.google.common.primitives.Ints;
-import com.google.common.primitives.Longs;
+
 
 public class TypeService extends ServiceLocator.Service
 {
@@ -173,7 +169,7 @@ public class TypeService extends ServiceLocator.Service
     		else if(cls.getName().equals(Float.class.getName()))
     				obj = new Float(str);
     		else if(cls.getName().equals(Character.class.getName()))
-    				obj = Chars.fromByteArray(bytes); 
+    				obj = new Character(str.toCharArray()[0]);
     		else if(cls.getName().equals(BigDecimal.class.getName()))
     				obj = new BigDecimal(str);
     		else if(cls.getName().equals(String.class.getName()))
