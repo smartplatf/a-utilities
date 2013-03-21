@@ -41,13 +41,26 @@
 
 package org.anon.utilities.services;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.UUID;
 import java.math.BigDecimal;
+
+import javax.lang.model.type.PrimitiveType;
+
 import org.apache.commons.lang.ClassUtils;
+
+import com.google.common.primitives.Chars;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 
 public class TypeService extends ServiceLocator.Service
 {
@@ -143,6 +156,67 @@ public class TypeService extends ServiceLocator.Service
             return CLASS_MAP.get(name);
 
         return null;
+    }
+    
+    public Object convertToPrimitive(Class cls, byte[] bytes)
+    {
+    	Object obj = null;
+    	if(checkPrimitive(cls))
+    	{
+    		String str = new String(bytes);
+    		if(cls.getName().equals(Long.class.getName()))
+    				obj = new Long(str);
+    		else if(cls.getName().equals(Integer.class.getName()) || cls.getName().equals(int.class.getName()))
+    				obj = new Integer(str);
+    		else if(cls.getName().equals(Double.class.getName()))
+    				obj = new Double(str);
+    		else if(cls.getName().equals(Float.class.getName()))
+    				obj = new Float(str);
+    		else if(cls.getName().equals(Character.class.getName()))
+    				obj = Chars.fromByteArray(bytes); 
+    		else if(cls.getName().equals(BigDecimal.class.getName()))
+    				obj = new BigDecimal(str);
+    		else if(cls.getName().equals(String.class.getName()))
+    				obj = str;
+    		
+    	}
+    	
+    	return obj;
+    }
+    
+    public boolean convertableFromString(Class cls)
+    {
+    	if(cls.getName().equals(Date.class.getName()))
+    	{
+    		return true;
+    	}
+    	if(cls.getName().equals(UUID.class.getName()))
+    	{
+    		return true;
+    	}
+    	
+    	return false;
+    }
+    
+    public Object createObjectFromString(Class cls, String str)
+    {
+    	Object obj = null;
+    	if(cls.getName().equals(Date.class.getName()))
+    	{
+    		try {
+    			DateFormat df = new SimpleDateFormat("EEE MMM DD HH:mm:ss z yyyy");
+				obj = df.parse(str);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	if(cls.getName().equals(UUID.class.getName()))
+    	{
+    		obj = UUID.fromString(str);
+    	}
+    	
+    	return obj;
     }
 }
 

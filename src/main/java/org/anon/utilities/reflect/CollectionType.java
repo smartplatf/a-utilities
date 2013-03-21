@@ -96,7 +96,7 @@ public class CollectionType extends RepeatableType
                 DataContext ctx = new DataContext(o);
                 ctx.setType("" + cnt);
                 ctx.setCustom(pctx.getCustom());
-                ctx.setParentPath(pctx.fieldpath());
+                ctx.setParentPath(pctx.fieldpath()+"."+ctx.getType());
                 //assumption is that the mod is the same as o, so shd be fine.
                 //Does not traverse the cotraverse
                 Object modified = traverse(traverse, ctx, visit, mod, at);

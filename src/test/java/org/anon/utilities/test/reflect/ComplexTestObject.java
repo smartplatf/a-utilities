@@ -63,7 +63,7 @@ public class ComplexTestObject implements java.io.Serializable
         return "_double:" + _double +
             ":_dt:" + _dt +
             ":_simple:" + _simple +
-            "_simpleDuplicate" + _simpleDuplicate;
+            "_simpleDuplicate:" + _simpleDuplicate;
     }
 }
 

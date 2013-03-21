@@ -67,11 +67,17 @@ public class CreatorFromMap implements CVisitor
         {
             Map check = (Map)ctx.getCustom();
             Field fld = ctx.field();
-            if ((fld != null) && (check.containsKey(fld.getName())))
+            System.out.println("------->"+ctx.getCustom()+"::"+ fld.getName());
+            
+            /*if ((fld != null) && (check.containsKey(fld.getName())))
             {
                 Object val = check.get(fld.getName());
                 Collection lst = convert().objectToCollection(val, true);
                 ret = lst.size();
+            }*/
+            if(fld != null)
+            {
+            	ret = convert().collectionSizeFromMap(check, fld.getName());
             }
         }
         else if (ctx instanceof ListItemContext)
@@ -102,7 +108,8 @@ public class CreatorFromMap implements CVisitor
     {
         Object ret = handleFirst(ctx);
         if (ret != null) return ret;
-
+        
+        System.out.println("Handling list/map/default:"+ctx);
         if (ctx instanceof ListItemContext)
             return handleListItem((ListItemContext)ctx);
         else if (ctx instanceof MapItemContext)
@@ -115,14 +122,14 @@ public class CreatorFromMap implements CVisitor
     {
         if ((ctx.field() == null) && (!(ctx instanceof ListItemContext)) && (!(ctx instanceof MapItemContext)))
         {
-            ctx.setCustom(_values);
+        	ctx.setCustom(_values);
             return _values;
         }
 
         return null;
     }
 
-    private Map getContextMap(DataContext ctx)
+    protected Map getContextMap(DataContext ctx)
     {
         Map checkIn = null;
         if (ctx.getCustom() instanceof Map)
@@ -130,14 +137,21 @@ public class CreatorFromMap implements CVisitor
         return checkIn;
     }
 
-    private Object handleListItem(ListItemContext lctx)
+    protected Object handleListItem(ListItemContext lctx)
     {
         Map checkIn = getContextMap(lctx);
         List vals = null;
         if (checkIn != null)
+        {
+        	//Get Map for ListItem
             vals = (List)convert().objectToCollection(checkIn.get(lctx.listField().getName()), true);
+        }
         else if (lctx.getCustom() instanceof List)
+        {
             vals = (List)lctx.getCustom();
+        }
+        
+        System.out.println("Vals:"+vals+":COUNT:"+lctx.getCount());
         if (vals != null)
         {
             Object val = vals.get(lctx.getCount());
@@ -163,15 +177,19 @@ public class CreatorFromMap implements CVisitor
         return val;
     }
 
-    private Object handleDefault(DataContext ctx)
+    protected Object handleDefault(DataContext ctx)
     {
-        Map checkIn = getContextMap(ctx);
-        if ((ctx.field() != null) && (checkIn != null) && (checkIn.containsKey(ctx.field().getName())))
-        {
+    	 Map checkIn = getContextMap(ctx);
+    	 String key = ctx.traversingClazz().getSimpleName()+"."+ctx.fieldpath();
+    	  
+         if ((ctx.field() != null) && (checkIn != null) && (checkIn.containsKey(ctx.field().getName())))
+    	{
             Object val = checkIn.get(ctx.field().getName());
-            if ((val != null) && (type().isAssignable(val.getClass(), ctx.fieldType())))
-                return val;
-
+    		if ((val != null) && (type().isAssignable(val.getClass(), ctx.fieldType())))
+            {
+            	return val;
+            }
+           
             if ((val != null) && (val instanceof Map))
             {
                 ctx.setCustom(val);
@@ -180,7 +198,7 @@ public class CreatorFromMap implements CVisitor
 
             if ((val != null) && ((val instanceof Collection) || (val.getClass().isArray())))
             {
-                ctx.setCustom(val);
+            	ctx.setCustom(val);
                 return val;
             }
         }

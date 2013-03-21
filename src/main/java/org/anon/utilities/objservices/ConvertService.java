@@ -41,8 +41,10 @@
 
 package org.anon.utilities.objservices;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -51,6 +53,7 @@ import java.util.Collection;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.lang.reflect.Constructor;
@@ -62,6 +65,8 @@ import org.anon.utilities.lang.json.JSONTranslator;
 import org.anon.utilities.verify.VerifiableObject;
 import org.anon.utilities.reflect.CreatorFromMap;
 import org.anon.utilities.reflect.ClassTraversal;
+import org.anon.utilities.reflect.ListItemContext;
+import org.anon.utilities.reflect.ObjectCreatorFromMap;
 import org.anon.utilities.exception.CtxException;
 
 public class ConvertService extends ObjectServiceLocator.ObjectService
@@ -258,6 +263,16 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         Object ret = traverse.traverse();
         return clazz.cast(ret);
     }
+    
+    public <T> T recordMapToObject(Class<T> clazz, Map values)
+        throws CtxException
+    {
+        ObjectCreatorFromMap create = new ObjectCreatorFromMap(values);
+        ClassTraversal traverse = new ClassTraversal(clazz, create);
+        Object ret = traverse.traverse();
+        return clazz.cast(ret);
+    }
+    
 
     public <T extends VerifiableObject> T mapToVerifiedObject(Class<T> clazz, Map values)
         throws CtxException
@@ -288,5 +303,44 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
             except().te(o, "Object cannot be verified");
         return cls.cast(o);
     }
+
+	
+	public int collectionSizeFromMap(Map check, String name) {
+		
+		Set<String> collectionItemSet = new HashSet<String>();
+		for(Object key : check.keySet())
+		{
+			String keyStr = (String)key;
+			if(keyStr.startsWith("List."+name))
+			{
+				String[] tokens = keyStr.split("\\.", 4);
+				if(tokens.length == 4)
+					collectionItemSet.add(tokens[2]);
+			}
+				
+		}
+		return collectionItemSet.size();	
+	}
+
+	public Object mapForCollectionItem(Map checkIn, ListItemContext lctx) {
+		Map<String, Object> mapForCollection = new HashMap<String, Object>();
+		for(Object key : checkIn.keySet())
+		{
+			String keyStr = (String)key;
+			if((lctx.listField() != null) && (keyStr.startsWith("List."+lctx.listField().getName())))
+			{
+				String[] tokens = keyStr.split("\\.", 4);
+				if((tokens.length == 4) && (tokens[2].equals(Integer.toString(lctx.getCount()))))
+				{
+					
+					mapForCollection.put(lctx.traversingClazz().getSimpleName()+"."+lctx.listField().getName()+"."+tokens[3],
+							checkIn.get(key));
+				}
+				
+			}
+		}
+		
+		return mapForCollection;
+	}
 }
 
