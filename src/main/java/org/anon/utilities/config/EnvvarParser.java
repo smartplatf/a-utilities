@@ -26,58 +26,64 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.loader.RelatedUtils
+ * File:                org.anon.utilities.config.EnvvarParser
  * Author:              rsankar
  * Revision:            1.0
- * Date:                06-08-2012
+ * Date:                21-01-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * a set of utilities to deal with related object
+ * A parser for environment variables
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.loader;
+package org.anon.utilities.config;
 
-public class RelatedUtils
+import java.util.List;
+
+import org.anon.utilities.exception.CtxException;
+
+public class EnvvarParser implements ValueParser
 {
-    private RelatedUtils()
+    public EnvvarParser()
     {
     }
 
-    public static Object getRelatedObject(Object obj)
+    private String valueString(String value)
     {
-        if (obj == null)
-            return null;
-
-        return getRelatedObjectForClass(obj.getClass());
-    }
-
-    public static Object getRelatedObjectForClass(Class cls)
-    {
-        if (cls == null)
-            return null;
-
-        Object ret = null;
-        ClassLoader ldr = cls.getClassLoader();
-        if (ldr instanceof RelatedLoader)
+        String val = value;
+        if (val.startsWith("$"))
         {
-            RelatedLoader rldr = (RelatedLoader)ldr;
-            ret = rldr.relatedTo();
+            String envvar = val.substring(1);
+            val = System.getenv(envvar);
         }
-
-        return ret;
+        return val;
     }
 
-    public static CrossLinkRelatedObject getCLRelatedObject(Object obj)
+    public String[] asString(String value)
+        throws CtxException
     {
-        Object related = getRelatedObject(obj);
-        if (related != null)
-            return new CrossLinkRelatedObject(related);
+        String p = valueString(value);
+        return new String[] { p };
+    }
 
+    public int[] asInt(String value)
+        throws CtxException
+    {
         return null;
+    }
+
+    public <T extends ParsedObject> List<T> asObject(String value, Class<T> clazz)
+        throws CtxException
+    {
+        return null;
+    }
+
+    public boolean recognizesFormat(String value)
+    {
+        return (value.startsWith("$"));
     }
 }
 

@@ -78,6 +78,7 @@ public class JSONTranslator implements Translator
     {
         StringBuffer buff = io().readStream(istr);
         JSON j = JSONSerializer.toJSON(buff.toString());
+        System.out.println("Got JSON string: " + buff.toString() + ":" + j);
         ObjectCreator creator = new ObjectCreator(j);
         ClassTraversal ctraversal = new ClassTraversal(type, creator);
         Object ret = ctraversal.traverse();

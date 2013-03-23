@@ -45,6 +45,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Date;
 import java.util.Set;
+import java.util.Map;
+import java.util.Date;
 import java.util.UUID;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -67,6 +69,8 @@ import org.anon.utilities.reflect.CreatorFromMap;
 import org.anon.utilities.reflect.ClassTraversal;
 import org.anon.utilities.reflect.ListItemContext;
 import org.anon.utilities.reflect.ObjectCreatorFromMap;
+import org.anon.utilities.reflect.ObjectTraversal;
+import org.anon.utilities.reflect.MapFromObject;
 import org.anon.utilities.exception.CtxException;
 
 public class ConvertService extends ObjectServiceLocator.ObjectService
@@ -135,6 +139,13 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
             except().rt(e, new CtxException.Context("Cannot createFrom: " + val, cls.getName()));
         }
         return null;
+    }
+
+    public boolean stringToBoolean(String val)
+    {
+        boolean ret = ((val != null) && (val.equalsIgnoreCase("yes")));
+        ret = (ret || ((val != null) && (val.equalsIgnoreCase("true"))));
+        return ret;
     }
 
     public String objectToString(Object val)
@@ -274,11 +285,20 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
     }
     
 
+    public Map objectToMap(Object val)
+        throws CtxException
+    {
+        MapFromObject map = new MapFromObject();
+        ObjectTraversal traverse = new ObjectTraversal(map, val, false, null);
+        traverse.traverse();
+        return map.createdMap();
+    }
+
     public <T extends VerifiableObject> T mapToVerifiedObject(Class<T> clazz, Map values)
         throws CtxException
     {
         VerifiableObject o = mapToObject(clazz, values);
-        if (!o.verify())
+        if ((o != null) && (!o.verify()))
             except().te(o, "Object cannot be verified.");
         return clazz.cast(o);
     }

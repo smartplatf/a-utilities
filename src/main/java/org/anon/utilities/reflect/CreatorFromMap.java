@@ -63,7 +63,6 @@ public class CreatorFromMap implements CVisitor
     public int collectionSize(DataContext ctx)
     {
         int ret = 0;
-        System.out.println("Collection Map:"+ctx.getCustom());
         if (ctx.getCustom() instanceof Map)
         {
             Map check = (Map)ctx.getCustom();
@@ -108,7 +107,6 @@ public class CreatorFromMap implements CVisitor
     {
         Object ret = handleFirst(ctx);
         if (ret != null) return ret;
-        
         if (ctx instanceof ListItemContext)
             return handleListItem((ListItemContext)ctx);
         else if (ctx instanceof MapItemContext)
@@ -121,7 +119,7 @@ public class CreatorFromMap implements CVisitor
     {
         if ((ctx.field() == null) && (!(ctx instanceof ListItemContext)) && (!(ctx instanceof MapItemContext)))
         {
-        	ctx.setCustom(_values);
+            ctx.setCustom(_values);
             return _values;
         }
 
@@ -196,7 +194,7 @@ public class CreatorFromMap implements CVisitor
 
             if ((val != null) && ((val instanceof Collection) || (val.getClass().isArray())))
             {
-            	ctx.setCustom(val);
+                ctx.setCustom(val);
                 return val;
             }
         }

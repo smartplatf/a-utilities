@@ -76,6 +76,11 @@ public class Graph
     {
         return _nodes.size();
     }
+
+    public List<GraphNode> nodes()
+    {
+        return _nodes;
+    }
 }
 
 

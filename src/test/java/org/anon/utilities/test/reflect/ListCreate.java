@@ -103,7 +103,6 @@ public class ListCreate implements CVisitor
     public void assertObject(ListTestObject obj)
     {
         assertTrue(obj._simpleObjs != null);
-	System.out.println("Size of list object:"+obj._simpleObjs.size());
         assertTrue(obj._simpleObjs.size() == 10);
         List simple = (List)_values.get("_simpleObjs");
         for (int i = 0; i < 10; i++)

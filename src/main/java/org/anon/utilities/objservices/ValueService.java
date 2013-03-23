@@ -45,12 +45,14 @@ import org.anon.utilities.config.ListParser;
 import org.anon.utilities.config.RangeParser;
 import org.anon.utilities.config.ParamsParser;
 import org.anon.utilities.config.ValueParser;
+import org.anon.utilities.config.EnvvarParser;
 import org.anon.utilities.exception.CtxException;
 
 public class ValueService extends ObjectServiceLocator.ObjectService
 {
     enum valuestrategy
     {
+        env(new EnvvarParser()),
         list(new ListParser()),
         range(new RangeParser()),
         params(new ParamsParser());
@@ -94,5 +96,20 @@ public class ValueService extends ObjectServiceLocator.ObjectService
         return valuestrategy.range.parser().asInt(val);
     }
 
+    public String envOrValue(String val)
+        throws CtxException
+    {
+        String[] ret = valuestrategy.env.parser().asString(val);
+        return ret[0];
+    }
+
+    public String[] listAsString(String val, boolean env)
+        throws CtxException
+    {
+        String lval = val;
+        if (env)
+            lval = envOrValue(lval);
+        return listAsString(lval);
+    }
 }
 
