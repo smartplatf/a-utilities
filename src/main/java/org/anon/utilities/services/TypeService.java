@@ -182,14 +182,15 @@ public class TypeService extends ServiceLocator.Service
     
     public boolean convertableFromString(Class cls)
     {
-    	if(cls.getName().equals(Date.class.getName()))
+    	
+    	String clsName = cls.getName();
+    	if(clsName.equals(Date.class.getName()) ||
+    			clsName.equals(Date.class.getName()) 
+    			)
     	{
     		return true;
     	}
-    	if(cls.getName().equals(UUID.class.getName()))
-    	{
-    		return true;
-    	}
+    	
     	
     	return false;
     }
