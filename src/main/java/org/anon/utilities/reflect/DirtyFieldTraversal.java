@@ -63,6 +63,17 @@ public class DirtyFieldTraversal extends ObjectTraversal
         throws CtxException
     {
         _dirtyFields = serial().dirtyFields(primary, cotraverse[0]);
+        
+        /*if(_dirtyFields != null){
+        	System.out.println("-------------------------------------------");
+        	System.out.println("DIRTY FIELDS:"+_dirtyFields.size());
+        	for(DirtyField fld : _dirtyFields)
+        	{
+        		System.out.println("Dfld:"+fld.getFieldName());
+        	}
+        	System.out.println("-------------------------------------------");
+        }*/
+        
         _context = new DFDataContext(_dirtyFields, primary, cotraverse);
     }
 

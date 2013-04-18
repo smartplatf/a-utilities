@@ -41,9 +41,11 @@
 
 package org.anon.utilities.reflect;
 
+import java.util.UUID;
 import java.util.Set;
 import java.util.Map;
 import java.util.List;
+import java.util.Date;
 import java.util.Collection;
 import java.lang.reflect.Field;
 
@@ -68,16 +70,16 @@ public class CreatorFromMap implements CVisitor
             Map check = (Map)ctx.getCustom();
             Field fld = ctx.field();
             
-            /*if ((fld != null) && (check.containsKey(fld.getName())))
+            if ((fld != null) && (check.containsKey(fld.getName())))
             {
                 Object val = check.get(fld.getName());
                 Collection lst = convert().objectToCollection(val, true);
                 ret = lst.size();
-            }*/
-            if(fld != null)
+            }
+            /*if(fld != null) RS: Should not be done here, but in the overridden class.
             {
             	ret = convert().collectionSizeFromMap(check, fld.getName());
-            }
+            }*/
         }
         else if (ctx instanceof ListItemContext)
         {
@@ -174,6 +176,7 @@ public class CreatorFromMap implements CVisitor
     }
 
     protected Object handleDefault(DataContext ctx)
+        throws CtxException
     {
     	 Map checkIn = getContextMap(ctx);
     	 String key = ctx.traversingClazz().getSimpleName()+"."+ctx.fieldpath();
@@ -184,6 +187,12 @@ public class CreatorFromMap implements CVisitor
     		if ((val != null) && (type().isAssignable(val.getClass(), ctx.fieldType())))
             {
             	return val;
+            }
+
+            if ((val != null) && ((ctx.fieldType().equals(UUID.class)) || (ctx.fieldType().equals(Date.class))))
+            {
+                Object ret = convert().stringToClass(val.toString(), ctx.fieldType());
+                return ret;
             }
            
             if ((val != null) && (val instanceof Map))

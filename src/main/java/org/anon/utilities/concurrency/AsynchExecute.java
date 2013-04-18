@@ -53,11 +53,13 @@ public class AsynchExecute extends AbstractExecute
 {
     private List<Thread> _runningThreads;
     private List<ExceptionCollector> _collect;
+    private List<ExecutionUnit> _units;
 
     public AsynchExecute()
     {
         super();
         _runningThreads = new ArrayList<Thread>();
+        _units = new ArrayList<ExecutionUnit>();
         _collect = new ArrayList<ExceptionCollector>();
     }
 
@@ -67,7 +69,11 @@ public class AsynchExecute extends AbstractExecute
         ExceptionCollector collect = new ExceptionCollector();
         ConcurrentRunnable run = new ConcurrentRunnable(unit, collect);
         Thread thrd = new Thread(run);
-        _runningThreads.add(thrd);
+        boolean add = true;
+        if ((unit instanceof ConfigurableUnit) && (!((ConfigurableUnit)unit).waitToComplete()))
+            add = false;
+        if (add)
+            _runningThreads.add(thrd);
         _collect.add(collect);
         thrd.start();
     }

@@ -65,10 +65,10 @@ import static org.anon.utilities.services.ServiceLocator.*;
 import org.anon.utilities.lang.Translator;
 import org.anon.utilities.lang.json.JSONTranslator;
 import org.anon.utilities.verify.VerifiableObject;
+import org.anon.utilities.reflect.CVisitor;
 import org.anon.utilities.reflect.CreatorFromMap;
 import org.anon.utilities.reflect.ClassTraversal;
 import org.anon.utilities.reflect.ListItemContext;
-import org.anon.utilities.reflect.ObjectCreatorFromMap;
 import org.anon.utilities.reflect.ObjectTraversal;
 import org.anon.utilities.reflect.MapFromObject;
 import org.anon.utilities.exception.CtxException;
@@ -76,6 +76,7 @@ import org.anon.utilities.exception.CtxException;
 public class ConvertService extends ObjectServiceLocator.ObjectService
 {
     private static final String FORMAT = "EEE, d MMM yyyy HH:mm:ss Z";
+    private static final String INPUTFORMAT = "MM/d/yyyy HH:mm";
 
     public static enum translator
     {
@@ -153,6 +154,9 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
     {
         try
         {
+            if (val == null)
+                return "null";
+
             Class cls = val.getClass();
             if (cls.isPrimitive())
             {
@@ -176,7 +180,7 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         try
         {
             if (fmt == null) //use default fmt
-                fmt = FORMAT;
+                fmt = INPUTFORMAT;
             SimpleDateFormat format = new SimpleDateFormat(fmt);
             Date dt = format.parse(val);
             return dt;
@@ -195,7 +199,7 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         try
         {
             if (fmt == null)
-                fmt = FORMAT;
+                fmt = INPUTFORMAT;
             SimpleDateFormat format =  new SimpleDateFormat(fmt);
             String ret = format.format(val);
             return ret;
@@ -275,11 +279,12 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         return clazz.cast(ret);
     }
     
-    public <T> T recordMapToObject(Class<T> clazz, Map values)
-        throws CtxException
+    
+    
+    public <T> T recordMapToObject(Class<T> clazz, CVisitor visitor)
+            throws CtxException
     {
-        ObjectCreatorFromMap create = new ObjectCreatorFromMap(values);
-        ClassTraversal traverse = new ClassTraversal(clazz, create);
+        ClassTraversal traverse = new ClassTraversal(clazz, visitor);
         Object ret = traverse.traverse();
         return clazz.cast(ret);
     }
@@ -325,13 +330,13 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
     }
 
 	
-	public int collectionSizeFromMap(Map check, String name) {
+	public int collectionSizeFromMap(Map check, String name, Class fldType) {
 		
 		Set<String> collectionItemSet = new HashSet<String>();
 		for(Object key : check.keySet())
 		{
 			String keyStr = (String)key;
-			if(keyStr.startsWith("List."+name))
+			if(keyStr.startsWith(fldType.getSimpleName()+"."+name) )
 			{
 				String[] tokens = keyStr.split("\\.", 4);
 				if(tokens.length == 4)
@@ -347,7 +352,9 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
 		for(Object key : checkIn.keySet())
 		{
 			String keyStr = (String)key;
-			if((lctx.listField() != null) && (keyStr.startsWith("List."+lctx.listField().getName())))
+			if((lctx.listField() != null) && 
+					((keyStr.startsWith(lctx.listField().getType().getSimpleName()+"."+lctx.listField().getName()))))
+						
 			{
 				String[] tokens = keyStr.split("\\.", 4);
 				if((tokens.length == 4) && (tokens[2].equals(Integer.toString(lctx.getCount()))))

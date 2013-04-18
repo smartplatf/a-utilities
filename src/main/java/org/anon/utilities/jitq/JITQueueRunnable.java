@@ -147,6 +147,7 @@ public class JITQueueRunnable implements CtxRunnable
         catch (Exception e)
         {
             _logger.fatal(e);
+            e.printStackTrace();
         }
     }
 }

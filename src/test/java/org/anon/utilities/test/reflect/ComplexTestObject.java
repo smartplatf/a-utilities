@@ -42,6 +42,7 @@
 package org.anon.utilities.test.reflect;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class ComplexTestObject implements java.io.Serializable
 {
@@ -49,6 +50,8 @@ public class ComplexTestObject implements java.io.Serializable
     Date _dt;
     SimpleTestObject _simple;
     SimpleTestObject _simpleDuplicate;
+    UUID _id;
+    String _str;
 
     public ComplexTestObject()
     {
@@ -56,6 +59,17 @@ public class ComplexTestObject implements java.io.Serializable
         _double = new Double(10.123);
         _dt = new Date();
         _simpleDuplicate = _simple;
+        _id = UUID.randomUUID();
+        _str = _id.toString();
+    }
+    public ComplexTestObject(int i)
+    {
+        _simple = new SimpleTestObject(i);
+        _double = new Double(10.123);
+        _dt = new Date();
+        _simpleDuplicate = _simple;
+        _id = UUID.randomUUID();
+        _str = _id.toString();
     }
 
     public String toString()

@@ -89,7 +89,7 @@ public class Parameters
         throws CtxException
     {
         Object ret = null;
-        for (int i = 0; (ret != null) && (i < _types.length); i++)
+        for (int i = 0; (ret == null) && (i < _types.length); i++)
         {
             if (!_types[i].isExplicit())
             {

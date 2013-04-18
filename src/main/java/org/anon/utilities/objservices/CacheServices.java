@@ -26,78 +26,60 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.crosslink.CrossLinkAny
+ * File:                org.anon.utilities.objservices.CacheServices
  * Author:              rsankar
  * Revision:            1.0
- * Date:                06-08-2012
+ * Date:                27-03-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A cross linker that links for any class
+ * A set of services for cache related operation
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.crosslink;
+package org.anon.utilities.objservices;
 
+import org.anon.utilities.memcache.ElementCreator;
+import org.anon.utilities.memcache.LimitedMemCache;
+import org.anon.utilities.memcache.MemCacheParameters;
+import org.anon.utilities.memcache.guava.GuavaMemCache;
 import org.anon.utilities.exception.CtxException;
 
-public class CrossLinkAny extends CrossLinker
+public class CacheServices extends ObjectServiceLocator.ObjectService
 {
-    private String _method;
-    private Class[] _prms;
-
-    public CrossLinkAny(String cls, ClassLoader ldr)
-        throws CtxException
+    public CacheServices()
     {
-        super(ldr, cls);
+        super();
     }
 
-    public CrossLinkAny(String cls)
+    public <K, V> LimitedMemCache<K, V> create(MemCacheParameters<K, V> parms)
         throws CtxException
     {
-        super(cls);
-    }
-    
-    public CrossLinkAny(Object obj)
-        throws CtxException
-    {
-        super(obj);
+        //For now the assumption is the only implementation
+        LimitedMemCache<K, V> cache = new GuavaMemCache<K, V>();
+        if (parms.creator() != null)
+            cache.setupCreator(parms.creator());
+        if (parms.listener() != null)
+            cache.setupRemovalListener(parms.listener());
+
+        cache.initialize(parms.limit());
+        return cache;
     }
 
-    public Object invoke(String mthd, Object ... parms)
+    public <K, T> LimitedMemCache<K, T> create(int limit)
         throws CtxException
     {
-        _method = "";
-        _prms = null;
-        return linkMethod(mthd, parms);
-    }
-
-    public Object invoke(String mthd, Class[] cls, Object[] parms)
-        throws CtxException
-    {
-        _method = mthd;
-        _prms = cls;
-        return linkMethod(mthd, parms);
-    }
-
-    public Object create(Class[] cls, Object[] parms)
-        throws CtxException
-    {
-        _method = "<init>";
-        _prms = cls;
+        MemCacheParameters<K, T> parms = new MemCacheParameters<K, T>(limit);
         return create(parms);
     }
 
-    protected Class[] parmTypes(String mthd, Object ... params)
+    public <K, T> LimitedMemCache<K, T> create(int limit, ElementCreator<K, T> create)
+        throws CtxException
     {
-        if ((_method != null) && (_method.length() > 0) && (_method.equals(mthd)))
-        {
-            return _prms;
-        }
-
-        return super.parmTypes(mthd, params);
+        MemCacheParameters<K, T> parms = new MemCacheParameters<K, T>(limit, create);
+        return create(parms);
     }
 }
 

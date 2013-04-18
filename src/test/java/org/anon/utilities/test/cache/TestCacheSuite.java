@@ -23,62 +23,41 @@
  * */
  
 /**
+ *
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.anatomy.CrossLinkApplication
+ * File:                org.anon.utilities.test.cache.TestCacheSuite
  * Author:              rsankar
  * Revision:            1.0
- * Date:                22-01-2013
+ * Date:                27-03-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A crosslink for application
+ * A suite for cache testing
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.anatomy;
+package org.anon.utilities.test.cache;
 
-import org.anon.utilities.crosslink.CrossLinker;
-import org.anon.utilities.exception.CtxException;
+import org.junit.BeforeClass;
+import org.junit.AfterClass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+import static org.junit.Assert.*;
 
-public class CrossLinkApplication extends CrossLinker
+@RunWith(Suite.class)
+@SuiteClasses({
+    TestCache.class
+})
+public class TestCacheSuite
 {
-    public CrossLinkApplication(Object app)
+    public TestCacheSuite()
     {
-        super(app);
-    }
-
-    public void setStartLoader(ClassLoader ldr)
-        throws CtxException
-    {
-        linkMethod("setStartLoader", ldr);
-    }
-
-    public ClassLoader getStartLoader()
-        throws CtxException
-    {
-        return (ClassLoader)linkMethod("getStartLoader");
-    }
-
-    public static CrossLinkApplication getApplication()
-        throws CtxException
-    {
-        Object app = Application.getApplication();
-        return new CrossLinkApplication(app);
-    }
-
-    @Override
-    protected Class[] parmTypes(String mthd, Object ... params)
-    {
-        if ((mthd != null) && (mthd.length() > 0) && (mthd.equals("setStartLoader")))
-        {
-            return new Class[] { ClassLoader.class };
-        }
-
-        return super.parmTypes(mthd, params);
     }
 }
+
 

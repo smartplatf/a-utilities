@@ -187,7 +187,7 @@ public class TypeService extends ServiceLocator.Service
     {
     	
     	String clsName = cls.getName();
-    	if(clsName.equals(Date.class.getName()) ||
+    	if(clsName.equals(UUID.class.getName()) ||
     			clsName.equals(Date.class.getName()) 
     			)
     	{
@@ -211,7 +211,7 @@ public class TypeService extends ServiceLocator.Service
 				e.printStackTrace();
 			}
     	}
-    	if(cls.getName().equals(UUID.class.getName()))
+    	else if(cls.getName().equals(UUID.class.getName()))
     	{
     		obj = UUID.fromString(str);
     	}

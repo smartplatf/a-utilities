@@ -43,24 +43,34 @@ package org.anon.utilities.test.reflect;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MyComplexTestObject implements Serializable {
 	Double _double;
     Date _dt;
+    long _long;
     SimpleTestObject _simple;
     List<SimpleTestObject> _simpleObjList;
+    Set<SimpleTestObject> _simpleObjSet;
     
    public MyComplexTestObject()
    {
 	   _simple = new SimpleTestObject();
        _double = new Double(10.123);
        _dt = new Date();
+       _long = 1L;
        
 	   _simpleObjList = new ArrayList<SimpleTestObject>();
 	   _simpleObjList.add(new SimpleTestObject());
 	   _simpleObjList.add(new SimpleTestObject());
+	   
+	   _simpleObjSet = new HashSet<SimpleTestObject>();
+	   _simpleObjSet.add(new SimpleTestObject());
+	   _simpleObjSet.add(new SimpleTestObject());
    }
    
    @Override
@@ -68,11 +78,13 @@ public class MyComplexTestObject implements Serializable {
    {
        return "_double:" + _double +
            ":_dt:" + _dt +
+           ":_long:"+_long +
            ":_simple:" + _simple +
-           "_simpleObjeList:" + getString(_simpleObjList);
+           "_simpleObjeList:" + getString(_simpleObjList) +
+           " _simpleObjSet:" + getString(_simpleObjSet);
    }
    
-   private String getString( List<SimpleTestObject>  list){
+   private String getString( Collection<SimpleTestObject>  list){
 	   if (list == null) return null;
 	   StringBuffer str = new StringBuffer();
 	   str.append("[");

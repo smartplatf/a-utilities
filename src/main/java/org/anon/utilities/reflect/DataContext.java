@@ -60,7 +60,8 @@ public class DataContext
     private boolean _before;
     private boolean _after;
     private String _type;
-
+    
+   
     public DataContext(Object primary, Object ... traversing)
         throws CtxException
     {
@@ -88,6 +89,8 @@ public class DataContext
         {
             assertion().assertNotNull(fld, "Cannot traverse a null field");
             _field = fld;
+            _type = pctx.getType();
+            
             String add = "";
             if (parPath.length() > 0)
                 add = ".";
@@ -95,7 +98,7 @@ public class DataContext
             fld.setAccessible(true);
             _primaryFieldVal = fld.get(primary);
             _fieldVal = new Object[traversing.length];
-            for (int i = 0; (traversing != null) && (i < traversing.length); i++)
+           for (int i = 0; (traversing != null) && (i < traversing.length); i++)
                 _fieldVal[i] = fld.get(traversing[i]);
         }
         catch (Exception e)
@@ -109,8 +112,33 @@ public class DataContext
     void setPrimaryObject(Object obj) { _primaryObject = obj; }
 
     public Field field() { return _field; }
-    public Class fieldType() { if (_field != null) return _field.getType();  else return null;}
-    public Object fieldVal() { return _primaryFieldVal; }
+    public Class fieldType() 
+    { 
+        if (_field != null) 
+        {
+            Class cls = _field.getType();
+            return cls;
+        }
+        else 
+            return null;
+    }
+
+    public Object fieldVal() {
+    	Object ret = _primaryFieldVal;
+    	
+    	if( (ret == null) && (_field != null) && (_primaryObject != null)){
+    		try {
+				ret = _field.get(_primaryObject);
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	return ret;
+    }
     public Object traversingObject() { return _primaryObject; }
     public Class traversingClazz() { return _traversingClass; }
 
@@ -124,14 +152,33 @@ public class DataContext
             //for primitives do not set null.
             if ((obj == null) && (_field != null) && (type().checkPrimitive(_field.getType())))
                 return;
-
+            //System.out.println("Field:"+_field+":: _primeObj:"+_primaryObject);
             if ((_field != null) && (_primaryObject != null))
+            {
                 _field.set(_primaryObject, obj);
+                _primaryFieldVal = obj;
+            }
         }
         catch (Exception e)
         {
             except().rt(e, new CtxException.Context("Set:" + _field.getName(), "Setting on: " + _primaryObject));
         }
+    }
+    
+    public void mergeToCoTraverse()
+            throws CtxException
+    {
+            try
+            {
+                if ((_field != null) && (_primaryObject != null) && (_traversingObject != null) && (_traversingObject.length > 0))
+                {
+                    _field.set(_traversingObject[0], fieldVal());
+                }
+            }
+            catch (Exception e)
+            {
+                except().rt(e, new CtxException.Context("Set:" + _field.getName(), "Setting on: Cotraverse"));
+            }
     }
 
     Object getObject()
@@ -183,5 +230,6 @@ public class DataContext
     public boolean after() { return _after; }
     public void setType(String t) { _type = t; }
     public String getType() { return _type; }
+   
 }
 

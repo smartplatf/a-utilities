@@ -67,7 +67,13 @@ public class RelatedLoader extends URLClassLoader implements ResourceFinder, Res
     {
         addForceLoadSuper("java.*");
         addForceLoadSuper("javax.*");
+        addForceLoadSuper("org.xml.sax.*");
+        addForceLoadSuper("org.w3c.dom.*");
         addForceLoadSuper("sun.*");
+        addForceLoadSuper("com.sun.org.apache.*");
+        addForceLoadSuper("org.apache.xerces.*");
+        addForceLoadSuper("org.apache.solr.*");
+        addForceLoadSuper("org.apache.lucene.*");
         addForceLoadSuper("org.apache.log4j.*");
         addForceLoadSuper("org.anon.utilities.exception.*");
         addForceLoadSuper("org.anon.utilities.logger.*");
@@ -233,8 +239,8 @@ public class RelatedLoader extends URLClassLoader implements ResourceFinder, Res
         try
         {
             foundClass found = getClassBytes(className);
-            byte[] classBytes = found._bytes;
-            if (classBytes != null)
+            byte[] classBytes = (found != null)? found._bytes : null;
+            if ((found != null) && (classBytes != null))
             {
                 URL url = found._url;
                 ProtectionDomain domain = domainFor(url);
@@ -345,7 +351,7 @@ public class RelatedLoader extends URLClassLoader implements ResourceFinder, Res
 
             if (io == null)
             {
-                System.out.println("CANNOT FIND RESOURCE STREAM FOR: " + className);
+                //System.out.println("CANNOT FIND RESOURCE STREAM FOR: " + className);
             }
             else
             {

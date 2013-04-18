@@ -41,6 +41,7 @@
 
 package org.anon.utilities.reflect;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
 import java.lang.reflect.ParameterizedType;
@@ -69,7 +70,18 @@ public class CollectionClass extends CollectionType
             Class cls, Object primary, Object ... cotraverse)
         throws CtxException
     {
-        List ret = new ArrayList();
+    	Collection ret ;
+    	
+    	if(primary == null)
+    	{
+    		ret = new ArrayList();
+    	}
+    	else
+    	{
+    		assertion().assertTrue(primary instanceof Collection, "primary in ctx is not of Collection type");
+    		ret = (Collection)primary;
+    	}
+    	
         Field fld = pctx.field();
         Type type = null;
         if (fld != null)

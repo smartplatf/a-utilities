@@ -219,7 +219,7 @@ public class ReflectionService extends ServiceLocator.Service
                 }
             }
 
-            if ((fld == null) && (cls.getSuperclass() != null))
+            if ((fld == null) && (cls.getSuperclass() != null) && (!cls.getSuperclass().getName().equals("java.lang.Object")))
                 fld = getAnnotatedField(cls.getSuperclass(), annotate);
         }
         catch (Exception e)
@@ -236,6 +236,7 @@ public class ReflectionService extends ServiceLocator.Service
         try
         {
             Class annotate = annotatein;
+            System.out.println("Trying to get : " + cls + ":" + annotatein + ":" + cls.getClassLoader() + ":" + annotatein.getClassLoader());
             if (!annotatein.getClassLoader().equals(cls.getClassLoader()))
             {
                 annotate = cls.getClassLoader().loadClass(annotatein.getName());
@@ -249,7 +250,7 @@ public class ReflectionService extends ServiceLocator.Service
                 }
             }
 
-            if (cls.getSuperclass() != null)
+            if ((cls.getSuperclass() != null) && (!cls.getSuperclass().getName().equals("java.lang.Object")))
             {
                 Field[] add = getAnnotatedFields(cls.getSuperclass(), annotate);
                 for (int i = 0; i < add.length; i++)
@@ -261,6 +262,31 @@ public class ReflectionService extends ServiceLocator.Service
             except().rt(e, new CtxException.Context("AnnotatedFields: " + annotatein.getName() + ":" + cls.getName(), e.getMessage()));
         }
         return ret.toArray(new Field[0]);
+    }
+
+    public Object[] getAnnotatedFieldValues(Object obj, Class annotatein)
+        throws CtxException
+    {
+        if (obj == null)
+            return null;
+
+        List<Object> vals = new ArrayList<Object>();
+        Field[] flds = getAnnotatedFields(obj.getClass(), annotatein);
+        try
+        {
+            for (int i = 0; (flds != null) && (i < flds.length); i++)
+            {
+                flds[i].setAccessible(true);
+                Object val = flds[i].get(obj);
+                vals.add(val);
+            }
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("AnnotatedFieldValue: " + annotatein.getName() + ":" + obj.getClass().getName(), e.getMessage()));
+        }
+
+        return vals.toArray();
     }
 
     public Method getAnyMethod(Class cls, String mthd, Class ... params)

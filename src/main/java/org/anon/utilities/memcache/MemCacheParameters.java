@@ -26,59 +26,48 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.anatomy.CrossLinkApplication
+ * File:                org.anon.utilities.memcache.MemCacheParameters
  * Author:              rsankar
  * Revision:            1.0
- * Date:                22-01-2013
+ * Date:                27-03-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A crosslink for application
+ * A set of parameters based on which mem cache is created
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.anatomy;
+package org.anon.utilities.memcache;
 
-import org.anon.utilities.crosslink.CrossLinker;
-import org.anon.utilities.exception.CtxException;
+import org.anon.utilities.utils.RepeaterVariants;
 
-public class CrossLinkApplication extends CrossLinker
+public class MemCacheParameters<K, T> implements RepeaterVariants
 {
-    public CrossLinkApplication(Object app)
+    private int _limit;
+    private ElementCreator<K, T> _creator;
+    private ElementRemovalListener<K, T> _listener;
+
+    public MemCacheParameters(int limit, ElementCreator<K, T> create, ElementRemovalListener<K, T> list)
     {
-        super(app);
+        _limit = limit;
+        _creator = create;
+        _listener = list;
     }
 
-    public void setStartLoader(ClassLoader ldr)
-        throws CtxException
+    public MemCacheParameters(int limit, ElementCreator<K, T> create)
     {
-        linkMethod("setStartLoader", ldr);
+        this(limit, create, null);
     }
 
-    public ClassLoader getStartLoader()
-        throws CtxException
+    public MemCacheParameters(int limit)
     {
-        return (ClassLoader)linkMethod("getStartLoader");
+        this(limit, null, null);
     }
 
-    public static CrossLinkApplication getApplication()
-        throws CtxException
-    {
-        Object app = Application.getApplication();
-        return new CrossLinkApplication(app);
-    }
-
-    @Override
-    protected Class[] parmTypes(String mthd, Object ... params)
-    {
-        if ((mthd != null) && (mthd.length() > 0) && (mthd.equals("setStartLoader")))
-        {
-            return new Class[] { ClassLoader.class };
-        }
-
-        return super.parmTypes(mthd, params);
-    }
+    public int limit() { return _limit; }
+    public ElementCreator<K, T> creator() { return _creator; }
+    public ElementRemovalListener<K, T> listener() { return _listener; }
 }
 

@@ -97,5 +97,6 @@ public class GraphRuntimeNode
     public List<GraphRuntimeNode> blockedNodes() { return _blocking; }
     public Method method() { return _myNode.method(); }
     public Class clazz() { return _myNode.clazz(); }
+    public NodeDetails details() { return _myNode.details(); }
 }
 

@@ -43,6 +43,7 @@ package org.anon.utilities.gconcurrent.execute;
 
 import java.util.List;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 import static org.anon.utilities.services.ServiceLocator.*;
 import static org.anon.utilities.objservices.ObjectServiceLocator.*;
@@ -52,8 +53,8 @@ import org.anon.utilities.exception.CtxException;
 
 public abstract class ExecuteGraphNode
 {
-    private GraphContext _context;
-    private GraphRuntimeNode _grtNode;
+    protected GraphContext _context;
+    protected GraphRuntimeNode _grtNode;
     private Method _method;
     private Class _clazz;
     private Parameters _parameters;
@@ -112,9 +113,17 @@ public abstract class ExecuteGraphNode
             Object ret = invokeExecute(_method, runWith, parms);
             successOrFailure(ret);
         }
+        catch (InvocationTargetException ie)
+        {
+            String msg = ie.getMessage();
+            if (ie.getCause() != null)
+                msg = ie.getCause().getMessage();
+            except().rt(ie, new CtxException.Context("Error: ", msg));
+
+        }
         catch (Exception e)
         {
-            except().rt(e, new CtxException.Context("ExecuteGraphNode.runGraphNode", "Exception"));
+            except().rt(e, new CtxException.Context("ExecuteGraphNode.runGraphNode", e.getMessage()));
         }
         finally
         {

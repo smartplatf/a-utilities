@@ -66,6 +66,7 @@ public class Log4jProvider implements LogProvider
             URL resource = loader.getResource("log4j.xml");
             if (resource != null)
             {
+            	System.out.println("Loaded log4j.properties:"+resource.getPath());
                 DOMConfigurator.configure(resource);
             }
             else
@@ -74,6 +75,7 @@ public class Log4jProvider implements LogProvider
                 resource = loader.getResource("log4j.properties");
                 if (resource != null)
                 {
+                	System.out.println("Loaded log4j.properties:"+resource.getPath());
                     PropertyConfigurator.configure(resource);
                 }
                 else

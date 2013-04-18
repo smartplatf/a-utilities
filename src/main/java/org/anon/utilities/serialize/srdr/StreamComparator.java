@@ -72,7 +72,6 @@ public class StreamComparator
         List<String> tclses = _to.nextClassDescriptor();
         if (!clses.equals(tclses))
             except().te(this, "The two streams are not of the same object");
-
         if ((fld != null) && ((clses.size() > 0) || (index >= 0)))
         {
             Class c = fld;
@@ -85,7 +84,7 @@ public class StreamComparator
         }
         else
         {
-            for (int i = 0; i < clses.size(); i++)
+        	for (int i = 0; i < clses.size(); i++)
             {
                 _traverse.push(clses.get(i));
                 added++;
@@ -202,6 +201,24 @@ public class StreamComparator
         if (dt != tdt)
             flds.add(dfld);
     }
+    
+    private void compareAddUUID(String fldname, Class fldcls, int index, List<DirtyField> flds)
+            throws CtxException
+        {
+            DirtyField dfld = new DirtyField(fldname, index);
+            List<String> clses = _compare.nextClassDescriptor();
+            List<String> tclses = _to.nextClassDescriptor();
+            if (!clses.equals(tclses))
+                except().te("Mismatch in classes?"); //can this just mean a difference?
+            long ms1 = _compare.nextLong();
+            long ms2 = _to.nextLong();
+            
+            long ls1 = _compare.nextLong();
+            long ls2 = _to.nextLong();
+
+            if ((ms1 !=ms2) || (ls1 != ls2))
+                flds.add(dfld);
+        }
 
     private void compareAddArrayList(String fldname, Class fldcls, int index, List<DirtyField> flds)
         throws CtxException
@@ -214,7 +231,7 @@ public class StreamComparator
         int len = _compare.nextInt();
         int tlen = _to.nextInt();
         boolean different = (len != tlen);
-        if (clses.get(0).equals("java.util.ArrayList"))
+        if ((clses.size() > 0) && clses.get(0).equals("java.util.ArrayList"))
         {
             //assumption is that we will use the parameterized type?
             int elemlen = _compare.blockInt();
@@ -281,6 +298,7 @@ public class StreamComparator
         else
             type = clsname.charAt(0);
         isPrimitive = BytesStreamReader.isPrimitive(chkPrimitive);
+        
         if (isPrimitive)
         {
             compareAddPrimitive(fldname, type, index, flds);
@@ -300,6 +318,10 @@ public class StreamComparator
         else if ((fldcls != null) && (java.util.Date.class.isAssignableFrom(fldcls)))
         {
             compareAddDate(fldname, fldcls, index, flds);
+        }
+        else if ((fldcls != null) && (java.util.UUID.class.isAssignableFrom(fldcls)))
+        {
+            compareAddUUID(fldname, fldcls, index, flds);
         }
         else
         {

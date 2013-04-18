@@ -117,8 +117,8 @@ public class JSONCreator implements TVisitor
                 if (type().checkPrimitive(cls))
                 {
                     CustomData cd = (CustomData)data.getCustom();
-                    if ((cd != null) && (cd._parent != null))
-                        addTo(cd._parent, data.getType(), data.traversingObject());
+                    if ((cd != null) && (cd._current != null))
+                        addTo(cd._current, data.getType(), data.traversingObject());
                 }
                 else
                 {

@@ -44,7 +44,7 @@ package org.anon.utilities.fsm;
 import static org.anon.utilities.services.ServiceLocator.*;
 import org.anon.utilities.exception.CtxException;
 
-public final class FiniteState
+public final class FiniteState implements java.io.Serializable
 {
     private String _stateEntityType;
     private String _stateName;

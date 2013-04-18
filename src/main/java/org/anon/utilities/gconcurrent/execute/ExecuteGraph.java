@@ -108,8 +108,8 @@ public abstract class ExecuteGraph implements Runnable, Repeatable
         }
         catch(Exception e)
         {
-            except().rt(e, new CtxException.Context("Exception Running: " + rnde, "Exception"));
             markNodeDone(rnde, true);
+            except().rt(e, new CtxException.Context("Exception: ", ""));
         }
 
         List<GraphRuntimeNode> unblocked = rnde.unblockAndGet();

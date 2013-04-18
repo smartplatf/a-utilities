@@ -223,5 +223,27 @@ public class SerializerService extends ObjectServiceLocator.ObjectService
 
         return null;
     }
+
+    public Object clone(Object obj)
+        throws CtxException
+    {
+        try
+        {
+            ByteArrayOutputStream ostr1 = new ByteArrayOutputStream();
+            serialize(ostr1, obj);
+            byte[] bytes = ostr1.toByteArray();
+            ostr1.close();
+            ByteArrayInputStream istr1 = new ByteArrayInputStream(bytes);
+            Object ret = deserialize(istr1);
+            istr1.close();
+            return ret;
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("SerializerService.clone", "Exception"));
+        }
+
+        return null;
+    }
 }
 

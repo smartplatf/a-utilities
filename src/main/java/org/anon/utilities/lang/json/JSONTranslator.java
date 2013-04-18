@@ -41,6 +41,7 @@
 
 package org.anon.utilities.lang.json;
 
+import java.util.Map;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -57,6 +58,12 @@ import org.anon.utilities.exception.CtxException;
 
 public class JSONTranslator implements Translator
 {
+    class TranslateMap
+    {
+        //TODO: can't think how to do this??
+        private Map<Object, Object> _data;
+    }
+
     public JSONTranslator()
     {
     }
@@ -77,11 +84,27 @@ public class JSONTranslator implements Translator
         throws CtxException
     {
         StringBuffer buff = io().readStream(istr);
-        JSON j = JSONSerializer.toJSON(buff.toString());
-        System.out.println("Got JSON string: " + buff.toString() + ":" + j);
+        String json = buff.toString();
+        assertion().assertTrue(((json != null) && (json.length() > 0)), "Invalid content for the request. Please send content.");
+        boolean useintermediate = false;
+        Class transcls = type;
+        if (type.equals(Map.class))
+        {
+            useintermediate = true;
+            transcls = TranslateMap.class;
+            json = "{'_data':" + buff.toString() + "}";
+        }
+
+        System.out.println("Got JSON string: " + json);
+        JSON j = JSONSerializer.toJSON(json);
         ObjectCreator creator = new ObjectCreator(j);
-        ClassTraversal ctraversal = new ClassTraversal(type, creator);
+        ClassTraversal ctraversal = new ClassTraversal(transcls, creator);
         Object ret = ctraversal.traverse();
+        if (useintermediate)
+        {
+            TranslateMap m = (TranslateMap)ret;
+            ret = m._data;
+        }
         return type.cast(ret);
     }
 }

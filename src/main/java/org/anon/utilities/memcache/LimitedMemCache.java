@@ -26,59 +26,39 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.anatomy.CrossLinkApplication
+ * File:                org.anon.utilities.memcache.LimitedMemCache
  * Author:              rsankar
  * Revision:            1.0
- * Date:                22-01-2013
+ * Date:                27-03-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A crosslink for application
+ * A memory based cache that is limited by parameters
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.anatomy;
+package org.anon.utilities.memcache;
 
-import org.anon.utilities.crosslink.CrossLinker;
+import org.anon.utilities.utils.Repeatable;
 import org.anon.utilities.exception.CtxException;
 
-public class CrossLinkApplication extends CrossLinker
+public interface LimitedMemCache<K, V> extends Repeatable
 {
-    public CrossLinkApplication(Object app)
-    {
-        super(app);
-    }
-
-    public void setStartLoader(ClassLoader ldr)
-        throws CtxException
-    {
-        linkMethod("setStartLoader", ldr);
-    }
-
-    public ClassLoader getStartLoader()
-        throws CtxException
-    {
-        return (ClassLoader)linkMethod("getStartLoader");
-    }
-
-    public static CrossLinkApplication getApplication()
-        throws CtxException
-    {
-        Object app = Application.getApplication();
-        return new CrossLinkApplication(app);
-    }
-
-    @Override
-    protected Class[] parmTypes(String mthd, Object ... params)
-    {
-        if ((mthd != null) && (mthd.length() > 0) && (mthd.equals("setStartLoader")))
-        {
-            return new Class[] { ClassLoader.class };
-        }
-
-        return super.parmTypes(mthd, params);
-    }
+    public V get(K key)
+        throws CtxException;
+    public void put(K key, V value)
+        throws CtxException;
+    public void invalidate(K key)
+        throws CtxException;
+    public void setupCreator(ElementCreator<K, V> creator)
+        throws CtxException;
+    public void setupRemovalListener(ElementRemovalListener<K, V> remover)
+        throws CtxException;
+    public void initialize(int limit)
+        throws CtxException;
+    public void cleanUp()
+        throws CtxException;
 }
 

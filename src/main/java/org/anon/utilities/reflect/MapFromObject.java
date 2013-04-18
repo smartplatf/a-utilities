@@ -1,17 +1,17 @@
 /**
- * SMART - State Machine ARchiTecture
+ * Utilities - Utilities used by anon
  *
  * Copyright (C) 2012 Individual contributors as indicated by
  * the @authors tag
  *
- * This file is a part of SMART.
+ * This file is a part of Utilities.
  *
- * SMART is a free software: you can redistribute it and/or modify
+ * Utilities is a free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * SMART is distributed in the hope that it will be useful,
+ * Utilities is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -69,6 +69,7 @@ public class MapFromObject implements TVisitor
         Object obj = data.getCustom();
         if ((obj == null) && (data.field() == null) && (data.before())) //the first time
         {
+            //System.out.println("In start for: " + data.getObject() + ":");
             data.setCustom(_values);
             return data.getObject();
         }
@@ -83,6 +84,7 @@ public class MapFromObject implements TVisitor
         else if (obj instanceof Collection)
         {
             Collection coll = (Collection)obj;
+            //System.out.println("In collection for: " + data.field() + ":" + data.getObject() + ":" + coll.size());
             Object o = handleValue(data);
             if (o != null) coll.add(o);
             return data.getObject();

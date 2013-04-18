@@ -42,6 +42,7 @@
 
 package org.anon.utilities.test.lang;
 
+import java.util.Map;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 
@@ -61,6 +62,7 @@ import org.anon.utilities.logger.Logger;
 
 public class TestJSONLang
 {
+
     @Test
     public void testTestJSONLang()
         throws Exception
@@ -141,6 +143,23 @@ public class TestJSONLang
         ClassTraversal ct = new ClassTraversal(MapTestObject.class, create);
         Object ret = ct.traverse();
         System.out.println("Created object back " + ret);*/
+    }
+
+    @Test
+    public void testMapObjectJSONLang()
+        throws Exception
+    {
+        String json = "{'ReviewObject':'Not present', 'review':'Reviewed','rating':1}";
+        ByteArrayInputStream istr = new ByteArrayInputStream(json.getBytes());
+        Map got = convert().readObject(istr, Map.class, translator.json);
+        assertTrue(got != null);
+        assertTrue(got.containsKey("ReviewObject"));
+        assertTrue(got.containsKey("review"));
+        assertTrue(got.containsKey("rating"));
+        assertTrue(got.get("ReviewObject").equals("Not present"));
+        assertTrue(got.get("review").equals("Reviewed"));
+        assertTrue(got.get("rating").equals(1));
+        System.out.println("JSON got is: " + got);
     }
 }
 
