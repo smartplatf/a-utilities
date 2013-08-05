@@ -1,17 +1,17 @@
 /**
- * Utilities - Utilities used by anon
+ * SMART - State Machine ARchiTecture
  *
  * Copyright (C) 2012 Individual contributors as indicated by
  * the @authors tag
  *
- * This file is a part of Utilities.
+ * This file is a part of SMART.
  *
- * Utilities is a free software: you can redistribute it and/or modify
+ * SMART is a free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Utilities is distributed in the hope that it will be useful,
+ * SMART is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -26,33 +26,51 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.serial.SimpleListTest
+ * File:                org.anon.utilities.objservices.CThreadLocals
  * Author:              rsankar
  * Revision:            1.0
- * Date:                08-01-2013
+ * Date:                08-06-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A simple list test
+ * A set of locals for cthread
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.serial;
+package org.anon.utilities.objservices;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
-public class SimpleListTest implements java.io.Serializable
+public class CThreadLocals
 {
-    private List<SimpleTestObject> _obj;
+    private static final ThreadLocal<Object> THREADLOCALS = new ThreadLocal<Object>();
 
-    public SimpleListTest()
+    public CThreadLocals()
     {
-        _obj = new ArrayList<SimpleTestObject>();
-        for (int i = 0; i < 100; i++)
-            _obj.add(new SimpleTestObject(i));
     }
+
+    public static void addToLocals(String name, Object val)
+    {
+        Map<String, Object> locals = (Map<String, Object>)getLocals();
+        if (locals == null)
+            locals = new HashMap<String, Object>();
+
+        locals.put(name, val);
+        setupLocals(locals);
+    }
+
+    public static void setupLocals(Map<String, Object> locals)
+    {
+        THREADLOCALS.set(locals);
+    }
+
+    public static Object getLocals()
+    {
+        return THREADLOCALS.get();
+    }
+
 }
 

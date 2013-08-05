@@ -26,33 +26,58 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.serial.SimpleListTest
+ * File:                org.anon.utilities.crypt.bc.AESProvider
  * Author:              rsankar
  * Revision:            1.0
- * Date:                08-01-2013
+ * Date:                31-05-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A simple list test
+ * A provider for aes implementation
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.serial;
+package org.anon.utilities.crypt.bc;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.security.Security;
 
-public class SimpleListTest implements java.io.Serializable
+import org.anon.utilities.crypt.Cryptor;
+import org.anon.utilities.crypt.Encryptor;
+import org.anon.utilities.crypt.Decryptor;
+import org.anon.utilities.crypt.KeyGenerator;
+import org.anon.utilities.exception.CtxException;
+
+public class AESProvider implements Cryptor
 {
-    private List<SimpleTestObject> _obj;
+    private KeyGenerator _kGenerator;
+    private AESMode _mode;
 
-    public SimpleListTest()
+    public AESProvider(AESMode mode, KeyGenerator generator)
     {
-        _obj = new ArrayList<SimpleTestObject>();
-        for (int i = 0; i < 100; i++)
-            _obj.add(new SimpleTestObject(i));
+        _mode = mode;
+        _kGenerator = generator;
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+    }
+
+    public Encryptor encryptor(String password)
+        throws CtxException
+    {
+        byte[] key = _kGenerator.keyFor(password);
+        return new AESEncryptor(_mode, key);
+    }
+
+    public Decryptor decryptor(String password)
+        throws CtxException
+    {
+        byte[] key = _kGenerator.keyFor(password);
+        return new AESDecryptor(_mode, key);
+    }
+
+    public static AESProvider getInstance(KeyGenerator generator)
+    {
+        return new AESProvider(AESMode.cbc, generator);
     }
 }
 

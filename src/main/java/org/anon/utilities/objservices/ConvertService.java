@@ -71,6 +71,7 @@ import org.anon.utilities.reflect.ClassTraversal;
 import org.anon.utilities.reflect.ListItemContext;
 import org.anon.utilities.reflect.ObjectTraversal;
 import org.anon.utilities.reflect.MapFromObject;
+import org.anon.utilities.reflect.UpdaterFromMap;
 import org.anon.utilities.exception.CtxException;
 
 public class ConvertService extends ObjectServiceLocator.ObjectService
@@ -279,6 +280,15 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         return clazz.cast(ret);
     }
     
+    public <T> T updateObject(Object obj, Class<T> clazz, Map values)
+        throws CtxException
+    {
+    	
+    	UpdaterFromMap updater = new UpdaterFromMap(values);
+    	ObjectTraversal ot = new ObjectTraversal(updater, obj, true, null);
+    	Object res = ot.traverse();
+    	return clazz.cast(res);
+    }
     
     
     public <T> T recordMapToObject(Class<T> clazz, CVisitor visitor)
@@ -330,30 +340,45 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
     }
 
 	
-	public int collectionSizeFromMap(Map check, String name, Class fldType) {
-		
-		Set<String> collectionItemSet = new HashSet<String>();
+	/*public int collectionSizeFromMap(Map check, String name, Class fldType) {
+		String keyStr = null;
+		int size = 0;
 		for(Object key : check.keySet())
 		{
-			String keyStr = (String)key;
-			if(keyStr.startsWith(fldType.getSimpleName()+"."+name) )
+			keyStr = (String)key;
+			if(keyStr.equals(fldType.getSimpleName()+"."+name) )
 			{
-				String[] tokens = keyStr.split("\\.", 4);
-				if(tokens.length == 4)
-					collectionItemSet.add(tokens[2]);
+				
+				String fldVal = new String((byte[]) check.get(keyStr));
+                if (fldVal.indexOf(",") >= 0)
+                {
+                    String[] tokens = fldVal.split(",");
+                    System.out.println("LIST SIZE.....:"+tokens.length);
+                    return tokens.length;
+                }
+                else
+                    return 0;
 			}
+			
 				
 		}
-		return collectionItemSet.size();	
-	}
+		System.out.println("LIST SIZE.....:"+size);
+		 
+		return size;	
+	}*/
 
-	public Object mapForCollectionItem(Map checkIn, ListItemContext lctx) {
+	/*public Object mapForCollectionItem(Map checkIn, ListItemContext lctx) {
 		Map<String, Object> mapForCollection = new HashMap<String, Object>();
 		for(Object key : checkIn.keySet())
 		{
 			String keyStr = (String)key;
-			if((lctx.listField() != null) && 
-					((keyStr.startsWith(lctx.listField().getType().getSimpleName()+"."+lctx.listField().getName()))))
+				
+			String fieldType = null;
+			if( lctx.getActualFieldType() != null) 
+				fieldType = lctx.getActualFieldType().getSimpleName();
+			if((fieldType == null) && (lctx.listField() != null))
+				fieldType = lctx.listField().getType().getSimpleName();
+			if((keyStr.startsWith(fieldType+"."+lctx.listField().getName())))
 						
 			{
 				String[] tokens = keyStr.split("\\.", 4);
@@ -368,6 +393,14 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
 		}
 		
 		return mapForCollection;
-	}
+	}*/
+	
+	/*public int byteArrayToInt(byte[] b) 
+	{
+    		int value = 0;
+    		String str = new String(b);
+    		value = new Integer(str);
+    		return value;
+	}*/
 }
 

@@ -165,6 +165,17 @@ public class Anatomy
         return ret;
     }
 
+    public void start(StartConfig config, String[] order)
+        throws CtxException
+    {
+        for (int i = 0; i < order.length; i++)
+        {
+            AModule mod = module(order[i]);
+            if (mod != null)
+                mod.start(config);
+        }
+    }
+
     public void start(StartConfig config)
         throws CtxException
     {

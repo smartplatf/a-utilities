@@ -51,6 +51,7 @@ import java.util.ArrayList;
 
 
 import static org.anon.utilities.services.ServiceLocator.*;
+
 import org.anon.utilities.exception.CtxException;
 
 public class ReflectionService extends ServiceLocator.Service
@@ -112,6 +113,34 @@ public class ReflectionService extends ServiceLocator.Service
         return ret;
     }
 
+    public Field getAnyFieldByType(Class cls, String fldType)
+    	throws CtxException
+    {
+    	System.out.println("getting flds for cls:"+cls+"::"+fldType);
+    	Field fld = null;
+        try
+        {
+            Field[] flds = cls.getDeclaredFields();
+            for (Field f : flds)
+            {
+            	System.out.println(f.getName());
+            	if(f.getType().getName().equals(fldType))
+            	{
+            		return f;
+            	}
+            }
+            if(cls.getSuperclass() != null)
+            {
+            	return getAnyFieldByType(cls.getSuperclass(), fldType);
+            }
+        }
+        catch(Exception ex)
+        {
+        	   except().rt(ex, new CtxException.Context("FieldType: " + fldType + ":" + cls.getName() + ":", ex.getMessage()));
+        }
+        
+        return null;
+    }
     public Field getAnyField(Class cls, String attr)
         throws CtxException
     {
@@ -333,6 +362,24 @@ public class ReflectionService extends ServiceLocator.Service
 
         return null;
     }
+
+	public Object getAnyFieldValueByType(Class cls, Object obj, String fldType) 
+		throws CtxException
+	{
+		Field fld = getAnyFieldByType(cls, fldType);
+		assertion().assertNotNull(fld, "Cannot find field for type" + fldType + " in " + cls.getName());
+        try
+        {
+            fld.setAccessible(true);
+            return fld.get(obj);
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("FieldType: " + fldType + ":" + cls.getName() + ":", e.getMessage()));
+        }
+
+        return null;
+ 	}
 
 }
 

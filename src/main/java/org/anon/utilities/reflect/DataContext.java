@@ -42,6 +42,7 @@
 package org.anon.utilities.reflect;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import static org.anon.utilities.services.ServiceLocator.*;
@@ -114,6 +115,11 @@ public class DataContext
     public Field field() { return _field; }
     public Class fieldType() 
     { 
+    	if(fieldVal() != null)
+    	{
+    		return fieldVal().getClass();
+    		
+    	}
         if (_field != null) 
         {
             Class cls = _field.getType();
@@ -155,6 +161,15 @@ public class DataContext
             //System.out.println("Field:"+_field+":: _primeObj:"+_primaryObject);
             if ((_field != null) && (_primaryObject != null))
             {
+                int modifiers = _field.getModifiers();
+                if (Modifier.isFinal(modifiers))
+                {
+                    //assumption is that if there is a final field and we are trying to modify it, then
+                    //it means we want to modify it.
+                    Field modifiersField = Field.class.getDeclaredField("modifiers");
+                    modifiersField.setAccessible(true);
+                    modifiersField.setInt(_field, modifiers & ~Modifier.FINAL);
+                }
                 _field.set(_primaryObject, obj);
                 _primaryFieldVal = obj;
             }

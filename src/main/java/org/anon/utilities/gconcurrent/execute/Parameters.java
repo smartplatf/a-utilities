@@ -42,6 +42,7 @@
 package org.anon.utilities.gconcurrent.execute;
 
 import java.util.List;
+import java.lang.reflect.Type;
 
 import org.anon.utilities.exception.CtxException;
 
@@ -58,7 +59,7 @@ public class Parameters
         _types = ParamType.types();
     }
 
-    public Object parameterFor(Class cls, int i)
+    public Object parameterFor(Class cls, Type type, int i)
         throws CtxException
     {
         PDescriptor pdesc = null;
@@ -66,26 +67,26 @@ public class Parameters
             pdesc = _descriptor.get(i);
         Object obj = null;
         if (pdesc == null)
-            obj = findParameter(cls);
+            obj = findParameter(cls, type);
         else
-            obj = findExplicitParam(cls, pdesc);
+            obj = findExplicitParam(cls, type, pdesc);
 
         return obj;
     }
 
-    private Object findExplicitParam(Class cls, PDescriptor desc)
+    private Object findExplicitParam(Class cls, Type type, PDescriptor desc)
         throws CtxException
     {
-        ParamType type = desc.ptype();
+        ParamType ptype = desc.ptype();
         Object ret = null;
-        if (type.isExplicit())
-            ret = type.myProbe().valueFor(cls, _parms, desc);
+        if (ptype.isExplicit())
+            ret = ptype.myProbe().valueFor(cls, type, _parms, desc);
         else
-            ret = type.myProbe().valueFor(_parms, desc);
+            ret = ptype.myProbe().valueFor(_parms, type, desc);
         return ret;
     }
 
-    private Object findParameter(Class cls)
+    private Object findParameter(Class cls, Type type)
         throws CtxException
     {
         Object ret = null;
@@ -94,7 +95,7 @@ public class Parameters
             if (!_types[i].isExplicit())
             {
                 PProbe probe = _types[i].myProbe();
-                ret = probe.valueFor(cls, _parms); //assumes that implicit also handles when desc is present
+                ret = probe.valueFor(cls, type, _parms); //assumes that implicit also handles when desc is present
             }
         }
         return ret;

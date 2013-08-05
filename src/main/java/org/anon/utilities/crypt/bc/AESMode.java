@@ -26,33 +26,39 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.serial.SimpleListTest
+ * File:                org.anon.utilities.crypt.bc.AESMode
  * Author:              rsankar
  * Revision:            1.0
- * Date:                08-01-2013
+ * Date:                01-06-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A simple list test
+ * modes of encoding
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.serial;
+package org.anon.utilities.crypt.bc;
 
-import java.util.List;
-import java.util.ArrayList;
+import org.anon.utilities.crypt.ModeProcessor;
+import org.anon.utilities.exception.CtxException;
 
-public class SimpleListTest implements java.io.Serializable
+public enum AESMode
 {
-    private List<SimpleTestObject> _obj;
+    cbc(new CBCProcessor());
 
-    public SimpleListTest()
+    private ModeProcessor _processor;
+
+    private AESMode(ModeProcessor proc)
     {
-        _obj = new ArrayList<SimpleTestObject>();
-        for (int i = 0; i < 100; i++)
-            _obj.add(new SimpleTestObject(i));
+        _processor = proc;
+    }
+
+    public ModeProcessor processor()
+        throws CtxException
+    {
+        return (ModeProcessor)_processor.repeatMe(null);
     }
 }
 

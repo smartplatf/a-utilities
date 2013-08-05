@@ -541,7 +541,7 @@ public class TestObjectTraversal
         for (int i = 0; i < 1000; i++)
         {
             SimpleOT visit = new SimpleOT();
-            DirtyFieldTraversal dtraverse = new DirtyFieldTraversal(visit, o1, o2, false);
+            DirtyFieldTraversal dtraverse = new DirtyFieldTraversal(visit, o1, o2, o2, false);
             dtraverse.traverse();
         }
         perf().dumpHere(log);

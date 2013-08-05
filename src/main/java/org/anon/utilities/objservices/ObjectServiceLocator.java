@@ -71,6 +71,7 @@ public class ObjectServiceLocator
     private static final String JITQSVC = "org.anon.utilities.objservices.JITQueueService";
     private static final String CODECTRL = "org.anon.utilities.codecontrol.CodeControl";
     private static final String CACHESVC = "org.anon.utilities.objservices.CacheServices";
+    private static final String CRYPTSVC = "org.anon.utilities.objservices.CryptoService";
 
     static
     {
@@ -87,6 +88,7 @@ public class ObjectServiceLocator
         new ExecutorService();
         new CodeControl();
         new CacheServices();
+        new CryptoService();
     }
 
     private ObjectServiceLocator()
@@ -156,6 +158,11 @@ public class ObjectServiceLocator
     public static CacheServices cache()
     {
         return (CacheServices)OBJECTSERVICES.get(CACHESVC);
+    }
+
+    public static CryptoService crypt()
+    {
+        return (CryptoService)OBJECTSERVICES.get(CRYPTSVC);
     }
 }
 

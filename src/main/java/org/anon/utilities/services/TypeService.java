@@ -71,7 +71,7 @@ public class TypeService extends ServiceLocator.Service
 
     private static final Set<Class> WRAPPER_TYPES = new HashSet(Arrays.asList(
                     Boolean.class, Character.class, Byte.class, Short.class, 
-                    Integer.class, Long.class, Float.class, Double.class, Void.class, String.class, BigDecimal.class));
+                    Integer.class, Long.class, Float.class, Double.class, Void.class, String.class, BigDecimal.class, UUID.class));
     public boolean checkPrimitive(Class clazz) 
     {
         return (WRAPPER_TYPES.contains(clazz) || clazz.isPrimitive());
@@ -175,8 +175,12 @@ public class TypeService extends ServiceLocator.Service
     				obj = new Character(str.toCharArray()[0]);
     		else if(cls.getName().equals(BigDecimal.class.getName()))
     				obj = new BigDecimal(str);
+    		else if(cls.getName().equals(UUID.class.getName()))
+    				obj = UUID.fromString(str);
     		else if(cls.getName().equals(String.class.getName()))
     				obj = str;
+            else if(cls.getName().equals(Byte.class.getName()))
+                    obj = new Byte(str);
     		
     	}
     	
@@ -218,5 +222,13 @@ public class TypeService extends ServiceLocator.Service
     	
     	return obj;
     }
+    
+	//convert package name to path
+	public static final String convertToPath(String packageName) {
+		String packagePath = "";
+		packagePath = packageName.replace(".", "/");
+		return packagePath;
+	}
+
 }
 

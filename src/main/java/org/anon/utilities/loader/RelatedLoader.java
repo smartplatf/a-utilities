@@ -75,11 +75,14 @@ public class RelatedLoader extends URLClassLoader implements ResourceFinder, Res
         addForceLoadSuper("org.apache.solr.*");
         addForceLoadSuper("org.apache.lucene.*");
         addForceLoadSuper("org.apache.log4j.*");
+        addForceLoadSuper("org.bouncycastle.*");
         addForceLoadSuper("org.anon.utilities.exception.*");
         addForceLoadSuper("org.anon.utilities.logger.*");
         addForceLoadSuper("org.anon.utilities.services.*");
         addForceLoadSuper("org.anon.utilities.perfstat.*");
         addForceLoadSuper("org.anon.utilities.loader.RelatedLoader");
+        addForceLoadSuper("org.apache.hadoop.*");
+        addForceLoadSuper("org.apache.velocity.*");
     }
 
     class foundClass
@@ -341,7 +344,7 @@ public class RelatedLoader extends URLClassLoader implements ResourceFinder, Res
             for (int i = 0; (!found) && (i < _resources.size()); i++)
             {
                 finder = _resources.get(i);
-                url = finder.resourcePath(className);
+                url = finder.resourcePath(path);
                 if (url != null)
                     found = true;
             }

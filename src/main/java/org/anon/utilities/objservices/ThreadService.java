@@ -109,12 +109,42 @@ public class ThreadService extends ObjectServiceLocator.ObjectService
                 CThread ct = (CThread)t;
                 ret = ct.ctxLocal(name);
             }
+            else
+            {
+                Map<String, Object> locals = (Map<String, Object>)CThreadLocals.getLocals();
+                if (locals != null)
+                    return locals.get(name);
+                else
+                    return null;
+            }
         }
         catch (Exception e)
         {
             except().rt(e, new CtxException.Context("ThreadService.contextLocal", "Exception"));
         }
         return ret;
+    }
+
+    public void addToContextLocals(String name, Object val)
+        throws CtxException
+    {
+        try
+        {
+            Thread t = Thread.currentThread();
+            if (t instanceof CThread)
+            {
+                CThread ct = (CThread)t;
+                ct.addToContextLocals(name, val);
+            }
+            else
+            {
+                CThreadLocals.addToLocals(name, val);
+            }
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("ThreadService.addToContextLocals", "Exception"));
+        }
     }
 
     public void setContextLocals(Map<String, Object> locals)
@@ -130,6 +160,7 @@ public class ThreadService extends ObjectServiceLocator.ObjectService
             }
             else
             {
+                CThreadLocals.setupLocals(locals);
             }
         }
         catch (Exception e)

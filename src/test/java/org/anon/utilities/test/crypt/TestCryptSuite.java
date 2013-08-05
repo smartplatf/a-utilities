@@ -23,36 +23,41 @@
  * */
  
 /**
+ *
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.serial.SimpleListTest
+ * File:                org.anon.utilities.test.crypt.TestCryptSuite
  * Author:              rsankar
  * Revision:            1.0
- * Date:                08-01-2013
+ * Date:                01-06-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A simple list test
+ * A suite to test crypting functions
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.serial;
+package org.anon.utilities.test.crypt;
 
-import java.util.List;
-import java.util.ArrayList;
+import org.junit.BeforeClass;
+import org.junit.AfterClass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+import static org.junit.Assert.*;
 
-public class SimpleListTest implements java.io.Serializable
+@RunWith(Suite.class)
+@SuiteClasses({
+    TestCrypt.class
+})
+public class TestCryptSuite
 {
-    private List<SimpleTestObject> _obj;
-
-    public SimpleListTest()
+    public TestCryptSuite()
     {
-        _obj = new ArrayList<SimpleTestObject>();
-        for (int i = 0; i < 100; i++)
-            _obj.add(new SimpleTestObject(i));
     }
 }
+
 

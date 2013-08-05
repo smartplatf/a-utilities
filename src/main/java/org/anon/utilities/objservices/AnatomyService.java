@@ -111,6 +111,12 @@ public class AnatomyService extends ObjectServiceLocator.ObjectService
         myanatomy().start(config);
     }
 
+    public void startup(StartConfig config, String[] order)
+        throws CtxException
+    {
+        myanatomy().start(config, order);
+    }
+
     public void shutDown()
         throws CtxException
     {

@@ -23,36 +23,56 @@
  * */
  
 /**
+ *
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.serial.SimpleListTest
+ * File:                org.anon.utilities.test.crypt.TestCrypt
  * Author:              rsankar
  * Revision:            1.0
- * Date:                08-01-2013
+ * Date:                01-06-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A simple list test
+ * A testcase to test crypting functions
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.serial;
+package org.anon.utilities.test.crypt;
 
-import java.util.List;
-import java.util.ArrayList;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class SimpleListTest implements java.io.Serializable
+import static org.anon.utilities.objservices.ObjectServiceLocator.*;
+
+public class TestCrypt
 {
-    private List<SimpleTestObject> _obj;
-
-    public SimpleListTest()
+    @Test
+    public void testTestCrypt()
+        throws Exception
     {
-        _obj = new ArrayList<SimpleTestObject>();
-        for (int i = 0; i < 100; i++)
-            _obj.add(new SimpleTestObject(i));
+        String password = "passw0rd";
+        byte[] bytes = crypt().encrypt(password);
+        String dpwd = crypt().decrypt(bytes, password);
+        assertTrue(password.equals(dpwd));
+    }
+
+    @Test
+    public void testWrongPwd()
+    {
+        try
+        {
+            String password = "passw0rd";
+            byte[] bytes = crypt().encrypt(password);
+            String dpwd = crypt().decrypt(bytes, "wrongpwd");
+            assertFalse(password.equals(dpwd));
+        }
+        catch (Exception e)
+        {
+            assertTrue(true);
+        }
     }
 }
 

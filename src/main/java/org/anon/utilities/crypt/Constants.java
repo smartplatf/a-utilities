@@ -26,33 +26,26 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.serial.SimpleListTest
+ * File:                org.anon.utilities.crypt.Constants
  * Author:              rsankar
  * Revision:            1.0
- * Date:                08-01-2013
+ * Date:                31-05-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A simple list test
+ * A set of constants for encryption
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.serial;
+package org.anon.utilities.crypt;
 
-import java.util.List;
-import java.util.ArrayList;
-
-public class SimpleListTest implements java.io.Serializable
+public interface Constants
 {
-    private List<SimpleTestObject> _obj;
-
-    public SimpleListTest()
-    {
-        _obj = new ArrayList<SimpleTestObject>();
-        for (int i = 0; i < 100; i++)
-            _obj.add(new SimpleTestObject(i));
-    }
+    public static int KEY_LENGTH = 256;
+    public static int ITERATION_COUNT = 50;
+    public static String ALGORITHM = "PBEWithSHA256And256BitAES-CBC-BC";
+    public static String ENCRYPTION = "AES";
 }
 

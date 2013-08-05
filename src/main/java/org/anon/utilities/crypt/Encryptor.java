@@ -26,33 +26,29 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.serial.SimpleListTest
+ * File:                org.anon.utilities.crypt.Encryptor
  * Author:              rsankar
  * Revision:            1.0
- * Date:                08-01-2013
+ * Date:                31-05-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A simple list test
+ * encodes data
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.serial;
+package org.anon.utilities.crypt;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-public class SimpleListTest implements java.io.Serializable
+import org.anon.utilities.exception.CtxException;
+
+public interface Encryptor
 {
-    private List<SimpleTestObject> _obj;
-
-    public SimpleListTest()
-    {
-        _obj = new ArrayList<SimpleTestObject>();
-        for (int i = 0; i < 100; i++)
-            _obj.add(new SimpleTestObject(i));
-    }
+    public void encrypt(InputStream in, OutputStream out)
+        throws CtxException;
 }
 

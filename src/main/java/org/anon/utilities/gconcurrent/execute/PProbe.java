@@ -41,17 +41,19 @@
 
 package org.anon.utilities.gconcurrent.execute;
 
+import java.lang.reflect.Type;
+
 import org.anon.utilities.exception.CtxException;
 
 public interface PProbe
 {
-    public Object valueFor(Class cls, ProbeParms parms, PDescriptor desc)
+    public Object valueFor(Class cls, Type type, ProbeParms parms, PDescriptor desc)
         throws CtxException;
 
-    public Object valueFor(Class cls, ProbeParms parms)
+    public Object valueFor(Class cls, Type type, ProbeParms parms)
         throws CtxException;
 
-    public Object valueFor(ProbeParms parms, PDescriptor desc)
+    public Object valueFor(ProbeParms parms, Type type, PDescriptor desc)
         throws CtxException;
 
     public void releaseValues(Object[] val)

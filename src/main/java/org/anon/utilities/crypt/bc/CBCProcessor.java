@@ -26,33 +26,49 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.test.serial.SimpleListTest
+ * File:                org.anon.utilities.crypt.bc.CBCProcessor
  * Author:              rsankar
  * Revision:            1.0
- * Date:                08-01-2013
+ * Date:                01-06-2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A simple list test
+ * A processor that implements cbc mode
  *
  * ************************************************************
  * */
 
-package org.anon.utilities.test.serial;
+package org.anon.utilities.crypt.bc;
 
-import java.util.List;
-import java.util.ArrayList;
+import org.bouncycastle.crypto.engines.AESEngine;
+import org.bouncycastle.crypto.modes.CBCBlockCipher;
+import org.bouncycastle.crypto.paddings.BlockCipherPadding;
+import org.bouncycastle.crypto.paddings.PKCS7Padding;
+import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 
-public class SimpleListTest implements java.io.Serializable
+import org.anon.utilities.utils.Repeatable;
+import org.anon.utilities.utils.RepeaterVariants;
+import org.anon.utilities.exception.CtxException;
+
+public class CBCProcessor extends AESBaseProcessor
 {
-    private List<SimpleTestObject> _obj;
-
-    public SimpleListTest()
+    public CBCProcessor()
     {
-        _obj = new ArrayList<SimpleTestObject>();
-        for (int i = 0; i < 100; i++)
-            _obj.add(new SimpleTestObject(i));
+        super();
+    }
+
+    @Override
+    protected PaddedBufferedBlockCipher create()
+    {
+        BlockCipherPadding pad = new PKCS7Padding();
+        return new PaddedBufferedBlockCipher(new CBCBlockCipher(new AESEngine()), pad);
+    }
+
+    public Repeatable repeatMe(RepeaterVariants parms)
+        throws CtxException
+    {
+        return new CBCProcessor();
     }
 }
 

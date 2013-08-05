@@ -43,6 +43,7 @@ package org.anon.utilities.gconcurrent.execute;
 
 import java.util.List;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 
 import static org.anon.utilities.services.ServiceLocator.*;
 
@@ -54,17 +55,17 @@ public abstract class AbstractProbe implements PProbe
     {
     }
 
-    public Object valueFor(Class cls, ProbeParms parms, PDescriptor desc)
+    public Object valueFor(Class cls, Type type, ProbeParms parms, PDescriptor desc)
         throws CtxException
     {
-        Object ret = valueFor(parms, desc);
+        Object ret = valueFor(parms, type, desc);
         if ((ret != null) && type().isAssignable(ret.getClass(), cls))
             return ret;
 
         return null;
     }
 
-    public Object valueFor(Class cls, ProbeParms parms)
+    public Object valueFor(Class cls, Type type, ProbeParms parms)
         throws CtxException
     {
         Object ret = null;
@@ -81,7 +82,7 @@ public abstract class AbstractProbe implements PProbe
     protected abstract Object valueFor(ProbeParms parms)
         throws CtxException;
 
-    public Object valueFor(ProbeParms parms, PDescriptor desc)
+    public Object valueFor(ProbeParms parms, Type type, PDescriptor desc)
         throws CtxException
     {
         Object val = valueFor(parms);

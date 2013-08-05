@@ -191,7 +191,7 @@ public class ObjectTraversal implements Traversal
             //obj = visitor.visit(_context);
         }
 
-        if (modify) 
+        if (modify && (obj != null)) 
             ctx.modify(obj);
         return obj;
     }

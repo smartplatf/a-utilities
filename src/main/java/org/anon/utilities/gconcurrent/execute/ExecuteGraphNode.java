@@ -43,6 +43,7 @@ package org.anon.utilities.gconcurrent.execute;
 
 import java.util.List;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.anon.utilities.services.ServiceLocator.*;
@@ -81,11 +82,12 @@ public abstract class ExecuteGraphNode
         throws CtxException
     {
         Class[] clsparms = _method.getParameterTypes();
+        Type[] genericparms = _method.getGenericParameterTypes();
         int plen = clsparms.length;
         Object[] parms = new Object[plen];
         for (int i = 0; i < plen; i++)
         {
-            parms[i] = _parameters.parameterFor(clsparms[i], i);
+            parms[i] = _parameters.parameterFor(clsparms[i], genericparms[i], i);
         }
 
         return parms;

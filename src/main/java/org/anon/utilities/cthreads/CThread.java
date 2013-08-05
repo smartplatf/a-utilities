@@ -42,6 +42,7 @@
 package org.anon.utilities.cthreads;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import static org.anon.utilities.services.ServiceLocator.*;
 import org.anon.utilities.exception.CtxException;
@@ -68,9 +69,20 @@ public class CThread extends Thread
         _contextLocals = locals;
     }
 
+    public void addToContextLocals(String name, Object val)
+    {
+        if (_contextLocals == null)
+            _contextLocals = new HashMap<String, Object>();
+
+        _contextLocals.put(name, val);
+    }
+
     public Object ctxLocal(String key)
     {
-        return _contextLocals.get(key);
+        if (_contextLocals != null)
+            return _contextLocals.get(key);
+
+        return null;
     }
 
     public RuntimeContext runtime()

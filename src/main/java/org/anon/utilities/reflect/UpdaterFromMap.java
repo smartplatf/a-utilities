@@ -26,46 +26,65 @@
  * ************************************************************
  * HEADERS
  * ************************************************************
- * File:                org.anon.utilities.reflect.ListItemContext
- * Author:              rsankar
+ * File:                org.anon.utilities.reflect.UpdaterFromMap
+ * Author:              vjaasti
  * Revision:            1.0
- * Date:                29-12-2012
+ * Date:                May 15, 2013
  *
  * ************************************************************
  * REVISIONS
  * ************************************************************
- * A data context indicating list item
+ * <Purpose>
  *
  * ************************************************************
  * */
 
 package org.anon.utilities.reflect;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.Set;
 
 import org.anon.utilities.exception.CtxException;
 
-public class ListItemContext extends DataContext
-{
-    private Field _listField;
-    private int _count;
-    private Type _parameterizedType;
-    private Class _actualFieldType;
+public class UpdaterFromMap extends CreatorFromMap {
 
-    public ListItemContext(Boolean b, Class cls, Type type, Field fld, int cnt)
-        throws CtxException
+	private Map _values;
+
+    public UpdaterFromMap(Map values)
     {
-        super(b, cls);
-        _listField = fld;
-        _count = cnt;
-        _parameterizedType = type;
+    	super(values);
+        _values = values;
     }
+	
 
-    public int getCount() { return _count; }
-    public Field listField() { return _listField; }
-    public Type getGenericType() { return _parameterizedType; }
-    public void setActualFieldType(Class cls) { _actualFieldType = cls; }
-    public Class getActualFieldType() { return _actualFieldType; }
+    @Override
+    public Object visit(DataContext ctx)
+            throws CtxException
+    {
+        //ctx.setCustom(_values);
+        Object ret = handleFirst(ctx);
+    	if((ctx.field() != null) && (ctx.getCustom() instanceof Map) && (((Map)ctx.getCustom()).get(ctx.field().getName()) != null )) //dont do anything if field is not in map
+    	{
+    	     
+            
+            if((ctx.field() != null))
+            {
+    	        if (ret != null) return ret;
+    		if (ctx instanceof ListItemContext)
+    		    return handleListItem((ListItemContext)ctx);
+    		else if (ctx instanceof MapItemContext)
+    		    return handleMapItem((MapItemContext)ctx);
+
+    		return handleDefault(ctx);
+            }
+    	}
+    		
+    	else if(ctx.field() != null) //if not in update map 
+    	{
+    			return null; //return null if not in update Map
+    	}
+    		
+    		
+    		return ctx.traversingObject();
+        }
 }
-

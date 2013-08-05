@@ -134,7 +134,8 @@ public class ClassTraversal implements Traversal
         if ((visitor != null) && (obj != null))
             obj = visitor.visit(this, ctx, visit, true, null);
 
-        ctx.modify(obj);
+        if (modify && (obj != null))
+            ctx.modify(obj);
         return obj;
     }
 }

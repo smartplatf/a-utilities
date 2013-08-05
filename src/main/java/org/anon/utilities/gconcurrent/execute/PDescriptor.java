@@ -52,6 +52,7 @@ public class PDescriptor implements java.io.Serializable, PConstants
 {
     private ParamType _type;
     private String _attribute;
+    private String[] _desc;
 
     public PDescriptor()
     {
@@ -60,10 +61,14 @@ public class PDescriptor implements java.io.Serializable, PConstants
 
     public ParamType ptype() { return _type; }
     public String attribute() { return _attribute; }
+    public String[] links() { return _desc; }
 
     private static void fillPDescriptor(String[] types, PDescriptor pdesc)
         throws CtxException
     {
+        //if it is test, then types.length == 1, so cnt = 0, _type = null, so type = constant, attribute = test
+        //if it is config.test, then types.length = 2 cnt = 1, _type = config, attribute = test
+        //if it is link.order.orderitem, then types.length = 3, cnt = 2, _type = link, _attribute = orderitem, _desc = [order]
         String attribute = null;
         int cnt = (types.length - 1);
         pdesc._type = ParamType.valueOf(types[0]);
@@ -80,6 +85,12 @@ public class PDescriptor implements java.io.Serializable, PConstants
             attribute = null;
 
         pdesc._attribute = attribute;
+        if (cnt > 2)
+        {
+            pdesc._desc = new String[types.length - 2];
+            for (int i = 1; i < (types.length - 1); i++)
+                pdesc._desc[i - 1] = types[i];
+        }
     }
 
     public static List<PDescriptor> parseParamDesc(String parms)

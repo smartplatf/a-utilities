@@ -41,6 +41,8 @@
 
 package org.anon.utilities.gconcurrent.execute;
 
+import java.lang.reflect.Type;
+
 
 import static org.anon.utilities.services.ServiceLocator.*;
 import static org.anon.utilities.objservices.ObjectServiceLocator.*;
@@ -53,7 +55,7 @@ public class ConstantProbe implements PProbe
     {
     }
 
-    public Object valueFor(Class cls, ProbeParms parms, PDescriptor desc)
+    public Object valueFor(Class cls, Type type, ProbeParms parms, PDescriptor desc)
         throws CtxException
     {
         assertion().assertNotNull(desc, "Constants are explicit parameters and has to be specified.");
@@ -63,16 +65,16 @@ public class ConstantProbe implements PProbe
         return desc.attribute();
     }
 
-    public Object valueFor(Class cls, ProbeParms parms)
+    public Object valueFor(Class cls, Type type, ProbeParms parms)
         throws CtxException
     {
-        return valueFor(parms, null);
+        return valueFor(parms, type, null);
     }
 
-    public Object valueFor(ProbeParms parms, PDescriptor desc)
+    public Object valueFor(ProbeParms parms, Type type, PDescriptor desc)
         throws CtxException
     {
-        return valueFor(null, parms, desc);
+        return valueFor(null, type, parms, desc);
     }
 
     public void releaseValues(Object[] val)

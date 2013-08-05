@@ -93,6 +93,8 @@ public class BytesStreamReader extends BytesReader
 
     final long nextLong()
     {
+    	if(_read.length < _currInd+7)
+    		return 0;
         long ret = readLong(_read, _currInd);
         _currInd += 8;
         return ret;

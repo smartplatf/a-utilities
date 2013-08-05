@@ -52,17 +52,20 @@ public class DirtyFieldTraversal extends ObjectTraversal
 {
     private List<DirtyField> _dirtyFields;
 
-    public DirtyFieldTraversal(TVisitor visit, Object compare, Object original, boolean modify)
+    public DirtyFieldTraversal(TVisitor visit, Object compare, Object truth, Object original, boolean modify)
         throws CtxException
     {
-        super(visit, compare, modify, null, original);
+        super(visit, compare, modify, null, truth, original);
     }
 
     @Override
     protected void setupContext(Object primary, Object ... cotraverse)
         throws CtxException
     {
-        _dirtyFields = serial().dirtyFields(primary, cotraverse[0]);
+    	if(cotraverse.length > 1)
+    		_dirtyFields = serial().dirtyFields(primary, cotraverse[1]);
+    	else
+    		_dirtyFields = serial().dirtyFields(primary, cotraverse[0]);
         
         /*if(_dirtyFields != null){
         	System.out.println("-------------------------------------------");

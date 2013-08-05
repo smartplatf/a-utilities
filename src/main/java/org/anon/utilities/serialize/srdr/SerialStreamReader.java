@@ -74,7 +74,7 @@ public class SerialStreamReader extends BytesStreamReader implements ObjectStrea
         }
         else if( what == TC_NULL)
         {
-        	System.out.println("StringBlock NULL REF:");
+        	//System.out.println("StringBlock NULL REF:");
         }
         return ret;
     }

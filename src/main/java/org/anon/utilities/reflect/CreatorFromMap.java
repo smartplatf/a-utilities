@@ -117,7 +117,7 @@ public class CreatorFromMap implements CVisitor
         return handleDefault(ctx);
     }
 
-    private Object handleFirst(DataContext ctx)
+    protected Object handleFirst(DataContext ctx)
     {
         if ((ctx.field() == null) && (!(ctx instanceof ListItemContext)) && (!(ctx instanceof MapItemContext)))
         {
@@ -137,6 +137,7 @@ public class CreatorFromMap implements CVisitor
     }
 
     protected Object handleListItem(ListItemContext lctx)
+    	throws CtxException
     {
         Map checkIn = getContextMap(lctx);
         List vals = null;
@@ -160,7 +161,7 @@ public class CreatorFromMap implements CVisitor
         return null;
     }
 
-    private Object handleMapItem(MapItemContext mctx)
+    protected Object handleMapItem(MapItemContext mctx)
     {
         Map checkIn = getContextMap(mctx);
         Map vals = (Map)checkIn.get(mctx.mapField().getName());
@@ -180,11 +181,10 @@ public class CreatorFromMap implements CVisitor
     {
     	 Map checkIn = getContextMap(ctx);
     	 String key = ctx.traversingClazz().getSimpleName()+"."+ctx.fieldpath();
-    	  
-         if ((ctx.field() != null) && (checkIn != null) && (checkIn.containsKey(ctx.field().getName())))
-    	{
+    	 if ((ctx.field() != null) && (checkIn != null) && (checkIn.containsKey(ctx.field().getName())))
+    	 {
             Object val = checkIn.get(ctx.field().getName());
-    		if ((val != null) && (type().isAssignable(val.getClass(), ctx.fieldType())))
+            if ((val != null) && (type().isAssignable(val.getClass(), ctx.fieldType())))
             {
             	return val;
             }

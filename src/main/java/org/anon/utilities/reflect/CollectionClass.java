@@ -21,7 +21,7 @@
  *
  *
  * */
- 
+
 /**
  * ************************************************************
  * HEADERS
@@ -42,8 +42,10 @@
 package org.anon.utilities.reflect;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -51,77 +53,70 @@ import java.lang.reflect.Type;
 import static org.anon.utilities.services.ServiceLocator.*;
 import org.anon.utilities.exception.CtxException;
 
-public class CollectionClass extends CollectionType
-{
-    public CollectionClass()
-    {
-        super();
-        _object = false;
-    }
+public class CollectionClass extends CollectionType {
+	public CollectionClass() {
+		super();
+		_object = false;
+	}
 
-    @Override
-    protected RepeatableType createme()
-    {
-        return new CollectionClass();
-    }
+	@Override
+	protected RepeatableType createme() {
+		return new CollectionClass();
+	}
 
-    @Override
-    protected Object traverse(Traversal traverse, DataContext pctx, TVisitor visit, boolean mod, List<ObjectTraversal.myTraverser> at, 
-            Class cls, Object primary, Object ... cotraverse)
-        throws CtxException
-    {
-    	Collection ret ;
-    	
-    	if(primary == null)
-    	{
-    		ret = new ArrayList();
-    	}
-    	else
-    	{
-    		assertion().assertTrue(primary instanceof Collection, "primary in ctx is not of Collection type");
-    		ret = (Collection)primary;
-    	}
-    	
-        Field fld = pctx.field();
-        Type type = null;
-        if (fld != null)
-        {
-            type = fld.getGenericType();
-        }
-        else if (pctx instanceof ListItemContext)
-        {
-            type = ((ListItemContext)pctx).getGenericType();
-        }
-        Type convert = null;
-        Class send = null;
-        if ((type != null) && (type instanceof ParameterizedType))
-        {
-            ParameterizedType pt = (ParameterizedType)type;
-            convert = pt.getActualTypeArguments()[0];
-            if (convert instanceof ParameterizedType)
-            {
-                send = (Class)((ParameterizedType)convert).getRawType();
-            }
-            else
-                send = (Class)convert;
-        }
+	@Override
+	protected Object traverse(Traversal traverse, DataContext pctx,
+			TVisitor visit, boolean mod, List<ObjectTraversal.myTraverser> at,
+			Class cls, Object primary, Object... cotraverse)
+			throws CtxException {
+		Collection ret;
 
-        if (convert == null)
-        {
-            except().te(this, "Cannot traverse a class with generic lists " + type  + ":" + pctx);
-        }
+		if (primary == null) {
+			ret = new ArrayList();
+		} else {
+			assertion().assertTrue(primary instanceof Collection,
+					"primary in ctx is not of Collection type");
+			ret = (Collection) primary;
+		}
 
-        int sz = ((CVisitor)visit).collectionSize(pctx);
-        for (int i = 0; i < sz; i++)
-        {
-            ListItemContext ctx = new ListItemContext(true, send, convert, pctx.field(), i);
-            ctx.setParentPath(pctx.fieldpath());
-            ctx.setCustom(pctx.getCustom());
-            Object obj = traverse(traverse, ctx, visit, mod, at);
-            ret.add(obj);
-        }
+		Field fld = pctx.field();
+		Type type = null;
+		if (fld != null) {
+			type = fld.getGenericType();
+		} else if (pctx instanceof ListItemContext) {
+			type = ((ListItemContext) pctx).getGenericType();
+		}
+		Type convert = null;
+		Class send = null;
+		if ((type != null) && (type instanceof ParameterizedType)) {
+			ParameterizedType pt = (ParameterizedType) type;
+			convert = pt.getActualTypeArguments()[0];
+			if (convert instanceof ParameterizedType) {
+				send = (Class) ((ParameterizedType) convert).getRawType();
+			} else
+				send = (Class) convert;
+		}
 
-        return ret;
-    }
+		if (convert == null) {
+			except().te(
+					this,
+					"Cannot traverse a class with generic lists " + type + ":"
+							+ pctx);
+		}
+
+		int sz = ((CVisitor) visit).collectionSize(pctx);
+
+		for (int i = 0; i < sz; i++) {
+			ListItemContext ctx = new ListItemContext(true, send, convert,
+					pctx.field(), i);
+			ctx.setParentPath(pctx.fieldpath());
+			ctx.setCustom(pctx.getCustom());
+			ctx.setActualFieldType(pctx.fieldType());
+			Object obj = traverse(traverse, ctx, visit, mod, at);
+			ret.add(obj);
+		}
+
+		return ret;
+	}
+
 }
-
