@@ -61,6 +61,7 @@ public class DataContext
     private boolean _before;
     private boolean _after;
     private String _type;
+    private boolean _dups;
     
    
     public DataContext(Object primary, Object ... traversing)
@@ -211,6 +212,12 @@ public class DataContext
         if (obj == null)
             return false;
 
+        if (_dups)
+            return false;
+
+        //if (obj.getClass().isEnum())
+         //   return false;
+
         ObjectTraversal.myTraverser traverse = new ObjectTraversal.myTraverser(obj);
         return (traversed.contains(traverse));
     }
@@ -239,12 +246,19 @@ public class DataContext
         return ctx;
     }
 
+    public DataContext createContext(Object primary, Object ... cotraverse)
+        throws CtxException
+    {
+        return new DataContext(primary, cotraverse);
+    }
+
     public void setBefore() { _after = false; _before = true; }
     public boolean before() { return _before; }
     public void setAfter() { _after = true; _before = false;  }
     public boolean after() { return _after; }
     public void setType(String t) { _type = t; }
     public String getType() { return _type; }
+    public void setTraverseDuplicates(boolean dup) { _dups = dup; }
    
 }
 

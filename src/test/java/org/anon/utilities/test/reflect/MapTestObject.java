@@ -58,6 +58,7 @@ public class MapTestObject
     }
 
     public MapTestObject(int complex)
+        throws Exception
     {
         this();
         _simpleObject = new HashMap<String, SimpleTestObject>();

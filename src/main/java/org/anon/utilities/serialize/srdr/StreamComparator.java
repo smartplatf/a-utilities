@@ -336,10 +336,13 @@ public class StreamComparator
         List<DirtyField> dirty = new ArrayList<DirtyField>();
         Class cls = resolveClass(clsname);
         ObjectStreamClass ostr = ObjectStreamClass.lookup(cls);
-        ObjectStreamField[] flds = ostr.getFields();
-        for (int i = 0; i < flds.length; i++)
+        if (ostr != null)
         {
-            handleType(flds[i].getTypeCode(), flds[i].getTypeString(), flds[i].getType(), flds[i].getName(), index, dirty);
+            ObjectStreamField[] flds = ostr.getFields();
+            for (int i = 0; i < flds.length; i++)
+            {
+                handleType(flds[i].getTypeCode(), flds[i].getTypeString(), flds[i].getType(), flds[i].getName(), index, dirty);
+            }
         }
         return dirty;
     }

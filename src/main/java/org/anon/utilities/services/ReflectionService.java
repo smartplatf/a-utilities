@@ -318,6 +318,37 @@ public class ReflectionService extends ServiceLocator.Service
         return vals.toArray();
     }
 
+    public Method[] getAnnotatedMethods(Class cls, String annotatein)
+        throws CtxException
+    {
+        List<Method> ret = new ArrayList<Method>();
+        try
+        {
+            Class annotate = cls.getClassLoader().loadClass(annotatein);
+            System.out.println("Trying to get : " + cls + ":" + annotatein + ":" + cls.getClassLoader() + ":" );
+            Method[] mthds = cls.getDeclaredMethods();
+            for (int i = 0; i < mthds.length; i++)
+            {
+                if (mthds[i].isAnnotationPresent(annotate))
+                {
+                    ret.add(mthds[i]);
+                }
+            }
+
+            if ((cls.getSuperclass() != null) && (!cls.getSuperclass().getName().equals("java.lang.Object")))
+            {
+                Method[] add = getAnnotatedMethods(cls.getSuperclass(), annotatein);
+                for (int i = 0; i < add.length; i++)
+                    ret.add(add[i]);
+            }
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("AnnotatedMethods: " + annotatein + ":" + cls.getName(), e.getMessage()));
+        }
+        return ret.toArray(new Method[0]);
+    }
+
     public Method getAnyMethod(Class cls, String mthd, Class ... params)
         throws CtxException
     {

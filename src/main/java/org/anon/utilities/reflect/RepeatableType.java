@@ -73,6 +73,16 @@ public abstract class RepeatableType implements RecognizedType
     protected Object traverse(Traversal traverse, DataContext ctx, TVisitor visit, boolean mod, List<ObjectTraversal.myTraverser> at)
         throws CtxException
     {
+        /*
+        StackTraceElement[] elems = Thread.currentThread().getStackTrace();
+        String msg = "Has gone into an endless loop. ";
+        if (ctx.field() != null)
+            msg += ctx.field().getName();
+        if (ctx.traversingObject() != null)
+            msg += ":" + ctx.traversingObject().getClass().getName();
+        org.anon.utilities.services.ServiceLocator.assertion().assertTrue(elems.length <= 100, msg);
+        */
+            
         return traverse.traverse(ctx, visit, at, mod);
         /*if (_object)
         {

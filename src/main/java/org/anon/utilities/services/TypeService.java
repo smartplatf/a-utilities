@@ -181,6 +181,8 @@ public class TypeService extends ServiceLocator.Service
     				obj = str;
             else if(cls.getName().equals(Byte.class.getName()))
                     obj = new Byte(str);
+            else if(cls.getName().equals(Boolean.class.getName()))
+    				obj = new Boolean(str);
     		
     	}
     	

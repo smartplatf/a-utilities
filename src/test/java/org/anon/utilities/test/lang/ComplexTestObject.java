@@ -45,8 +45,15 @@ import java.util.Date;
 
 public class ComplexTestObject implements java.io.Serializable
 {
+    public class InnerClass
+    {
+        private String tst;
+        private transient Date isThisignored;
+    }
+
     Double _double;
     transient Date _dt;
+    InnerClass _cls;
     Date _trydt;
     SimpleTestObject _simple;
     SimpleTestObject _simpleDuplicate;
@@ -58,6 +65,9 @@ public class ComplexTestObject implements java.io.Serializable
         _dt = new Date();
         _trydt = new Date();
         _simpleDuplicate = _simple;
+        _cls = new InnerClass();
+        _cls.tst = "Trying";
+        _cls.isThisignored = new Date();
     }
 
     public String toString()

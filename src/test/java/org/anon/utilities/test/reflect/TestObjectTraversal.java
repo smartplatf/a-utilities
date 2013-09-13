@@ -43,6 +43,7 @@
 package org.anon.utilities.test.reflect;
 
 import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -62,9 +63,24 @@ import org.anon.utilities.reflect.DirtyFieldTraversal;
 import org.anon.utilities.reflect.ObjectTraversal;
 import org.anon.utilities.reflect.ClassTraversal;
 import org.anon.utilities.logger.Logger;
+import org.anon.utilities.fsm.FiniteStateMachine;
 
 public class TestObjectTraversal
 {
+    private FiniteStateMachine createTSMStates()
+        throws Exception
+    {
+        FiniteStateMachine mc = fsm().fsm("ComplexTestObject");
+        if (mc == null)
+        {
+            mc = fsm().create("ComplexTestObject", "start");
+            mc.addState("state1");
+            mc.addState("state2");
+            mc.addEndState("state3");
+        }
+        return mc;
+    }
+
     @Test
     public void testSimpleObjectTraversal()
         throws Exception
@@ -534,11 +550,15 @@ public class TestObjectTraversal
     public void testdirtyFieldTraversal()
         throws Exception
     {
-        ComplexTestObject o1 = new ComplexTestObject();
-        ComplexTestObject o2 = new ComplexTestObject();
+        FiniteStateMachine mc = createTSMStates();
+
+        TestSmartObject o1 = new TestSmartObject();
+        TestSmartObject o2 = new TestSmartObject();
+        mc.transition(o1, "state1");
+        System.out.println("State of o1 is: " + o1.utilities___currentState() + ":O2" + o2.utilities___currentState());
         Logger log = logger().glog("TestchangeTraversal");
         perf().startHere("testDirtyFieldTraversal");
-        for (int i = 0; i < 1000; i++)
+        //for (int i = 0; i < 1000; i++)
         {
             SimpleOT visit = new SimpleOT();
             DirtyFieldTraversal dtraverse = new DirtyFieldTraversal(visit, o1, o2, o2, false);
@@ -645,6 +665,18 @@ public class TestObjectTraversal
             UUID id = UUID.fromString(s);
             return id;
         }
+    }
+
+    @Test
+    public void testFinalCreate()
+        throws Exception
+    {
+        Map<String, Object> convert = new HashMap<String, Object>();
+        convert.put("_test", "Modified");
+        convert.put("_try", new Integer(10));
+        convert.put("_ltry", 10);
+        Object obj = convert().mapToObject(SimpleFinalData.class, convert);
+        System.out.println("Final: " + obj);
     }
 }
 

@@ -101,5 +101,7 @@ public class DFDataContext extends DataContext
         DFDataContext ctx = new DFDataContext(pctx, parPath, fld, primary, cotraverse);
         return ctx;
     }
+
+    public boolean hasDirtyFields() { return (_dirtyFields.size() > 0); }
 }
 

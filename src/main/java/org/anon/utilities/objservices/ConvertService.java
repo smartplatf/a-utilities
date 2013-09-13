@@ -45,6 +45,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Date;
 import java.util.Set;
+import java.util.List;
 import java.util.Map;
 import java.util.Date;
 import java.util.UUID;
@@ -112,6 +113,12 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         {
             e.printStackTrace();
         }
+    }
+
+    public boolean canConvertFromString(Class cls)
+        throws CtxException
+    {
+        return (_strConverters.containsKey(cls));
     }
 
     public <T> T stringToClass(String val, Class<T> cls)
@@ -297,6 +304,26 @@ public class ConvertService extends ObjectServiceLocator.ObjectService
         ClassTraversal traverse = new ClassTraversal(clazz, visitor);
         Object ret = traverse.traverse();
         return clazz.cast(ret);
+    }
+
+    public Object listObjectsToMap(Collection val)
+        throws CtxException
+    {
+        List lst = new ArrayList();
+        for (Object val1 : val)
+        {
+            if (type().checkPrimitive(val1.getClass()))
+            {
+                lst.add(val1);
+            }
+            else
+            {
+                Map m = objectToMap(val1);
+                lst.add(m);
+            }
+        }
+
+        return lst;
     }
     
 

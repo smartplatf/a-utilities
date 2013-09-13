@@ -80,7 +80,7 @@ public class CollectionType extends RepeatableType
             for (int i = 0; i < len; i++)
             {
                 Object o = Array.get(primary, i);
-                DataContext ctx = new DataContext(o);
+                DataContext ctx = pctx.createContext(o);
                 ctx.setCustom(pctx.getCustom());
                 ctx.setParentPath(pctx.fieldpath());
                 Object modified = traverse(traverse, ctx, visit, mod, at);
@@ -93,7 +93,7 @@ public class CollectionType extends RepeatableType
             int cnt = 0;
             for (Object o : coll)
             {
-                DataContext ctx = new DataContext(o);
+                DataContext ctx = pctx.createContext(o);
                 ctx.setType("" + cnt);
                 ctx.setCustom(pctx.getCustom());
                 ctx.setParentPath(pctx.fieldpath()+"."+ctx.getType());

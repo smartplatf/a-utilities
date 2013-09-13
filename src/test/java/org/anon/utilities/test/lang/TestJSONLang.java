@@ -106,13 +106,22 @@ public class TestJSONLang
         ClassTraversal ct = new ClassTraversal(ComplexTestObject.class, create);
         Object ret = ct.traverse();
         System.out.println("Created object back " + ret);
+
+        ByteArrayOutputStream bostr = new ByteArrayOutputStream();
+        convert().writeObject(obj, bostr, translator.json);
+        byte[] bytes = bostr.toByteArray();
+        System.out.println("Converted: " + new String(bytes));
+
+        ByteArrayInputStream bistr = new ByteArrayInputStream(bytes);
+        ComplexTestObject o = convert().readObject(bistr, ComplexTestObject.class, translator.json);
+        System.out.println("Converted back: " + o);
     }
 
     @Test
     public void testListJSONLang()
         throws Exception
     {
-        ListTestObject obj = new ListTestObject();
+        ListTestObject obj = new ListTestObject(1);
         JSONCreator traverse = new JSONCreator();
         ObjectTraversal traversal = new ObjectTraversal(traverse, obj, true, false, null);
         Logger log = logger().glog("TestJSONLangList");

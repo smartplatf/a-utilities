@@ -67,18 +67,20 @@ public class DirtyFieldTraversal extends ObjectTraversal
     	else
     		_dirtyFields = serial().dirtyFields(primary, cotraverse[0]);
         
-        /*if(_dirtyFields != null){
+        if(_dirtyFields != null){
         	System.out.println("-------------------------------------------");
-        	System.out.println("DIRTY FIELDS:"+_dirtyFields.size());
+        	System.out.println("DIRTY FIELDS:"+_dirtyFields.size() + ":" );
         	for(DirtyField fld : _dirtyFields)
         	{
         		System.out.println("Dfld:"+fld.getFieldName());
         	}
         	System.out.println("-------------------------------------------");
-        }*/
+        }
         
         _context = new DFDataContext(_dirtyFields, primary, cotraverse);
     }
+
+    public boolean hasChanged() { return ((DFDataContext)_context).hasDirtyFields(); }
 
 }
 

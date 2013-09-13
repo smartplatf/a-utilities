@@ -84,7 +84,7 @@ public class MapType extends RepeatableType
         for (Object key : map.keySet())
         {
             Object val = map.get(key);
-            DataContext kctx = new DataContext(key);
+            DataContext kctx = pctx.createContext(key);
             kctx.setType("Key-" + cnt);
             kctx.setCustom(pctx.getCustom());
             kctx.setParentPath(pctx.fieldpath());
@@ -92,7 +92,7 @@ public class MapType extends RepeatableType
             Object[] covals = new Object[len];
             for (int i = 0; i < len; i++)
                 covals[i] = comap[i].get(key);
-            DataContext ctx = new DataContext(val, covals);
+            DataContext ctx = pctx.createContext(val, covals);
             ctx.setType("Value-" + cnt);
             ctx.setCustom(pctx.getCustom());
             ctx.setParentPath(pctx.fieldpath());

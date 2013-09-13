@@ -84,6 +84,12 @@ public class TestFSM
         assertTrue(tsm.utilities___currentState() != null);
         assertTrue(tsm.utilities___currentState().stateName().equals("state2"));
         System.out.println(tsm.utilities___currentState());
+
+        TestStateEntity tsm2 = new TestStateEntity();
+        //mc.start(tsm);
+        assertTrue(tsm2.utilities___currentState() != null);
+        System.out.println("State is: " + tsm2.utilities___currentState().stateName());
+        assertTrue(tsm2.utilities___currentState().stateName().equals("start"));
     }
 
     public void assertEntity2(TestStateEntity2 entity2, String st2, String st1)

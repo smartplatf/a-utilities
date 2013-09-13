@@ -75,7 +75,7 @@ public class SimpleTestObject implements java.io.Serializable
         return "_integer:" + _integer +
             ":_string:" + _string +
             ":_decimal:" + _decimal + 
-            ":_uuid:" + _uuid + 
+           ":_uuid:" + _uuid + 
             ":_float:" + _float;
     }
 }

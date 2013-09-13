@@ -92,7 +92,8 @@ public final class FiniteStateGraph
     public void transitionToMe(StateEntity entity)
         throws CtxException
     {
-        entity.utilities___setCurrentState(_state);
+        FiniteState set = _state.createNew(); //Doing this to check if this is creating problems
+        entity.utilities___setCurrentState(set);
         StateEntity parent = entity.utilities___parent();
         if ((parent != null) && (_parentTransition.containsKey(parent.utilities___stateEntityType())))
         {

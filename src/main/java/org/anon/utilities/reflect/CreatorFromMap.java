@@ -189,6 +189,15 @@ public class CreatorFromMap implements CVisitor
             	return val;
             }
 
+
+            //For now we are specifically handling this type, just add the ones we want to handle here
+            if ((val != null) && (val.getClass().equals(Integer.class) || val.getClass().equals(Integer.TYPE)) 
+                    && (ctx.fieldType().equals(Long.TYPE) || ctx.fieldType().equals(Long.class)))
+            {
+                Long l = new Long(((Integer)val).intValue());
+                return l.longValue();
+            }
+
             if ((val != null) && ((ctx.fieldType().equals(UUID.class)) || (ctx.fieldType().equals(Date.class))))
             {
                 Object ret = convert().stringToClass(val.toString(), ctx.fieldType());

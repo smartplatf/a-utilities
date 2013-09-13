@@ -129,6 +129,12 @@ public class ObjectTraversal implements Traversal
     public ObjectTraversal(TVisitor visit, Object primary, boolean notrans, boolean modify, List<myTraverser> alreadyTraversed, Object ... cotraverse)
         throws CtxException
     {
+        this(visit, primary, notrans, modify, false, alreadyTraversed, cotraverse);
+    }
+
+    public ObjectTraversal(TVisitor visit, Object primary, boolean notrans, boolean modify, boolean duplicatetraverse, List<myTraverser> alreadyTraversed, Object ... cotraverse)
+        throws CtxException
+    {
         _visitor = visit;
         _ignoreTransients = notrans;
         assertion().assertNotNull(primary, "Cannot traverse a null object");
@@ -139,6 +145,7 @@ public class ObjectTraversal implements Traversal
         }
         //_context = new DataContext(primary, cotraverse);
         setupContext(primary, cotraverse);
+        _context.setTraverseDuplicates(duplicatetraverse);
         _modify = modify;
         _alreadyTraversed = alreadyTraversed;
         if (alreadyTraversed == null)

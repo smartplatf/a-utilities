@@ -47,7 +47,7 @@ import org.anon.utilities.exception.CtxException;
 public final class FiniteState implements java.io.Serializable
 {
     private String _stateEntityType;
-    private String _stateName;
+    private final String _stateName;
     private String _script;
     private boolean _initialState;
     private boolean _finalState;
@@ -82,6 +82,13 @@ public final class FiniteState implements java.io.Serializable
     public String toString()
     {
         return _stateEntityType + ":" + _stateName;
+    }
+
+    public FiniteState createNew()
+        throws CtxException
+    {
+        FiniteState state = new FiniteState(_stateEntityType, _stateName, _initialState, _finalState);
+        return state;
     }
 }
 

@@ -76,5 +76,12 @@ public class ITDataContext extends DataContext
         DataContext ctx = new ITDataContext(pctx, parPath, fld, primary, cotraverse);
         return ctx;
     }
+
+    @Override
+    public DataContext createContext(Object primary, Object ... cotraverse)
+        throws CtxException
+    {
+        return new ITDataContext(primary, cotraverse);
+    }
 }
 

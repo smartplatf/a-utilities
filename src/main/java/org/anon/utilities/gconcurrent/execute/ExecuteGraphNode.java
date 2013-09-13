@@ -107,10 +107,12 @@ public abstract class ExecuteGraphNode
     public Object runGraphNode()
         throws CtxException
     {
-        Object runWith = runtimeObject(_clazz);
-        Object[] parms = parametersFor();
+        Object[] parms = null;
+        Object runWith = null;
         try
         {
+            runWith = runtimeObject(_clazz);
+            parms = parametersFor();
             control().disableSystemExit();
             Object ret = invokeExecute(_method, runWith, parms);
             successOrFailure(ret);
@@ -131,7 +133,8 @@ public abstract class ExecuteGraphNode
         {
             control().enableSystemExit();
             done();
-            _parameters.release(parms);
+            if (parms != null)
+                _parameters.release(parms);
             _context.nodeDone();
         }
         return runWith;

@@ -59,6 +59,7 @@ public class ListTestObject implements java.io.Serializable
     }
 
     public ListTestObject(int complex)
+        throws Exception
     {
         this();
         _complexObjs = new ArrayList<ComplexTestObject>();
