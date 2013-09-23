@@ -78,14 +78,16 @@ public class PDescriptor implements java.io.Serializable, PConstants
             pdesc._type = ParamType.defaultType();
             attribute = types[cnt];
         }
+        else if (types.length == 1)
+            attribute = null;
         else
             attribute = types[cnt];
 
-        if (attribute.equals(NULL_STRING))
+        if ((attribute != null) && (attribute.equals(NULL_STRING)))
             attribute = null;
 
         pdesc._attribute = attribute;
-        if (cnt > 2)
+        if (cnt >= 2)
         {
             pdesc._desc = new String[types.length - 2];
             for (int i = 1; i < (types.length - 1); i++)
