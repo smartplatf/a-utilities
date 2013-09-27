@@ -212,7 +212,7 @@ public class CreatorFromMap implements CVisitor
 
             if ((val != null) && ((val instanceof Collection) || (val.getClass().isArray())))
             {
-                ctx.setCustom(val);
+                //ctx.setCustom(val);
                 return val;
             }
         }

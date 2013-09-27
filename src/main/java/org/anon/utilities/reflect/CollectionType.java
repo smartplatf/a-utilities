@@ -81,6 +81,7 @@ public class CollectionType extends RepeatableType
             {
                 Object o = Array.get(primary, i);
                 DataContext ctx = pctx.createContext(o);
+                ctx.setType("" + i);
                 ctx.setCustom(pctx.getCustom());
                 ctx.setParentPath(pctx.fieldpath());
                 Object modified = traverse(traverse, ctx, visit, mod, at);
