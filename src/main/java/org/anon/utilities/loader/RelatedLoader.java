@@ -49,6 +49,7 @@ import java.net.MalformedURLException;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.security.ProtectionDomain;
+import java.lang.reflect.Method;
 
 import static org.anon.utilities.services.ServiceLocator.*;
 import org.anon.utilities.exception.CtxException;
@@ -60,6 +61,7 @@ public class RelatedLoader extends URLClassLoader implements ResourceFinder, Res
     protected String[] _initComps;
     protected List<ResourceMod> _modifiers;
     protected List<ResourceFinder> _resources;
+    protected Object[] _mods;
 
     private static List<String> _forceSuperLoad = new ArrayList<String>();
 
@@ -118,15 +120,50 @@ public class RelatedLoader extends URLClassLoader implements ResourceFinder, Res
         {
             Class cls = this.loadClass("org.anon.utilities.anatomy.AModule");
             Object parent = null;
+            _mods = new Object[comps.length];
             for (int i = 0;  (comps != null) && (i < comps.length); i++)
             {
                 Class comp = this.loadClass(comps[i]); //full path with package and all.
                 parent = comp.getConstructor(cls).newInstance(parent);
+                _mods[i] = parent;
             }
         }
         catch (Exception e)
         {
             except().rt(e, new CtxException.Context("Error in initialization of comps", "Exception"));
+        }
+    }
+
+    public void cleanup()
+        throws CtxException
+    {
+        try
+        {
+            for (int i = 0; (_mods != null) && (i < _mods.length); i++)
+            {
+                try
+                {
+                    Method mthd = reflect().getAnyMethod(_mods[i].getClass(), "cleanup");
+                    if (mthd != null)
+                    {
+                        System.out.println("Cleaning up: " + _mods[i].getClass().getName());
+                        mthd.invoke(_mods[i]);
+                    }
+                    //_mods[i].getClass().getDeclaredMethod("cleanup").invoke(_mods[i]);
+                }
+                catch (Exception e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("Error in cleanup. ", "Exception"));
+        }
+        finally
+        {
+            _mods = null;
         }
     }
 

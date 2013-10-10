@@ -53,10 +53,16 @@ import org.anon.utilities.exception.CtxException;
 
 public class ObjectType extends RepeatableType
 {
-    private static Map<Class, Field[]> _fields = new ConcurrentHashMap<Class, Field[]>();
+    //private static Map<Class, Field[]> _fields = new ConcurrentHashMap<Class, Field[]>();
 
     public ObjectType()
     {
+    }
+
+    public static void clearFields()
+    {
+        //_fields.clear();
+        //_fields = null;
     }
 
     @Override
@@ -80,12 +86,14 @@ public class ObjectType extends RepeatableType
     {
         try
         {
-            Field[] flds = _fields.get(cls);
+            /*
+             * Field[] flds = _fields.get(cls);
             if (flds == null)
             {
                 flds = cls.getDeclaredFields();
                 _fields.put(cls, flds);
-            }
+            }*/
+            Field[] flds = cls.getDeclaredFields();
             for (int i = 0; i < flds.length; i++)
             {
                 if (pctx.shouldTraverse(flds[i]))

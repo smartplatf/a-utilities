@@ -44,6 +44,7 @@ package org.anon.utilities.objservices;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.anon.utilities.reflect.ObjectType;
 import org.anon.utilities.codecontrol.CodeControl;
 
 public class ObjectServiceLocator
@@ -163,6 +164,17 @@ public class ObjectServiceLocator
     public static CryptoService crypt()
     {
         return (CryptoService)OBJECTSERVICES.get(CRYPTSVC);
+    }
+
+    public static void releaseAll()
+    {
+        if (OBJECTSERVICES != null)
+        {
+            threads().cleanup();
+            OBJECTSERVICES.clear();
+        }
+        OBJECTSERVICES = null;
+        ObjectType.clearFields();
     }
 }
 

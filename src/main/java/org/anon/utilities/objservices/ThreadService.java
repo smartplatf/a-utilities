@@ -42,6 +42,7 @@
 package org.anon.utilities.objservices;
 
 import java.util.Map;
+import java.lang.reflect.Field;
 
 import static org.anon.utilities.services.ServiceLocator.*;
 import org.anon.utilities.cthreads.CThread;
@@ -166,6 +167,30 @@ public class ThreadService extends ObjectServiceLocator.ObjectService
         catch (Exception e)
         {
             except().rt(e, new CtxException.Context("ThreadService.setContextLocals", "Exception"));
+        }
+    }
+
+    public void cleanup()
+    {
+        //a foolishness, but has to be done
+        try
+        {
+            Class cls = Thread.class;
+            Field fld = cls.getDeclaredField("subclassAudits");
+            fld.setAccessible(true);
+            Object val = fld.get(null);
+            if (val != null)
+            {
+                synchronized(val)
+                {
+                    Map m = (Map)val;
+                    m.clear();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Exception: " + e.getMessage());
         }
     }
 }

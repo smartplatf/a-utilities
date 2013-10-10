@@ -41,6 +41,7 @@
 
 package org.anon.utilities.cthreads;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -105,6 +106,14 @@ public class CThreadExecutor extends ThreadPoolExecutor
                 _logger.fatal("Error in ending execution", e);
             }
         }
+    }
+
+    @Override
+    public List<Runnable> shutdownNow()
+        throws SecurityException
+    {
+        _logger = null;
+        return super.shutdownNow();
     }
 }
 

@@ -106,5 +106,10 @@ public abstract class AModule implements Repeatable
 
         return _parent.overriddenContext();
     }
+
+    public void cleanup()
+        throws CtxException
+    {
+    }
 }
 
