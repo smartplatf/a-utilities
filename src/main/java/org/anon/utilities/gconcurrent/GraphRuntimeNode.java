@@ -77,7 +77,7 @@ public class GraphRuntimeNode
         {
             for (GraphRuntimeNode nde : _blocking)
             {
-                if (nde.releaseBlock())
+                if ((nde != null) && nde.releaseBlock())
                     unblocked.add(nde);
             }
         }

@@ -122,12 +122,15 @@ public abstract class ExecuteGraphNode
             String msg = ie.getMessage();
             if (ie.getCause() != null)
                 msg = ie.getCause().getMessage();
-            except().rt(ie, new CtxException.Context("Error: ", msg));
+            except().rt(ie, new CtxException.Context("Error: ", msg + ":" + _method.getName() + ":" + _clazz.getName()));
 
         }
         catch (Exception e)
         {
-            except().rt(e, new CtxException.Context("ExecuteGraphNode.runGraphNode", e.getMessage()));
+            String add = "";
+            for (int i = 0; (parms != null) && (i < parms.length); i++)
+                add += ":" + parms[i];
+            except().rt(e, new CtxException.Context("ExecuteGraphNode.runGraphNode", e.getMessage() + ":" + _method.getName() + ":" + _clazz.getName() + ":" + add));
         }
         finally
         {
