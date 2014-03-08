@@ -43,6 +43,7 @@ package org.anon.utilities.crosslink;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.anon.utilities.exception.CtxException;
 import static org.anon.utilities.services.ServiceLocator.*;
@@ -169,6 +170,18 @@ public abstract class CrossLinker
                 except().te("Not a valid method " + method + ":" + _clazz + ":" + p, new CtxException.Context("linkMethod", "Method:" + method));
 
             return ret;
+        }
+        catch (InvocationTargetException ie)
+        {
+            String msg = ie.getMessage();
+            Throwable e = ie;
+            if (ie.getCause() != null)
+            {
+                msg = ie.getCause().getMessage();
+                e = ie.getCause();
+            }
+            except().rt(this, e, new CtxException.Context("Error: ", msg));
+
         }
         catch (Exception e)
         {

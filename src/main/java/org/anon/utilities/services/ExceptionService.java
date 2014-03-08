@@ -68,7 +68,7 @@ public class ExceptionService extends ServiceLocator.Service
         _registeredExceptions.add(exceptclass);
     }
 
-    protected CtxException throwHandler(Object obj, String mthd, Throwable t, String msg, Context[] ctx)
+    protected CtxException throwHandler(Object obj, String mthd, Throwable t, String msg, Context[] ctx, int code)
     {
         CtxException throwexcept = null;
         if ((t != null) && (t instanceof CtxException))
@@ -81,7 +81,7 @@ public class ExceptionService extends ServiceLocator.Service
             {
                 if (except.throwme(obj, mthd))
                 {
-                    RepeatParms parms = new RepeatParms(mthd, msg, t);
+                    RepeatParms parms = new RepeatParms(mthd, msg, t, code);
                     throwexcept = (CtxException)except.repeatMe(parms);
                     break;
                 }
@@ -89,7 +89,7 @@ public class ExceptionService extends ServiceLocator.Service
         }
 
         if (throwexcept == null)
-            throwexcept = new CtxException(msg, t);
+            throwexcept = new CtxException(code, msg, t);
 
         String mod = "Context.Exception";
         if (obj != null)
@@ -103,11 +103,24 @@ public class ExceptionService extends ServiceLocator.Service
         return throwexcept;
     }
 
+    public void rt(Object obj, String mthd, Throwable t, int code, String msg, Context ctx)
+        throws CtxException
+    {
+        CtxException except = throwHandler(obj, mthd, t, msg, new Context[] { ctx } , code);
+        throw except;
+    }
+
     public void rt(Object obj, String mthd, Throwable t, String msg, Context ctx)
         throws CtxException
     {
-        CtxException except = throwHandler(obj, mthd, t, msg, new Context[] { ctx } );
+        CtxException except = throwHandler(obj, mthd, t, msg, new Context[] { ctx } , 0);
         throw except;
+    }
+
+    public void rt(Object obj, Throwable t, int code, String msg, Context ctx)
+        throws CtxException
+    {
+        rt(obj, "", t, code, msg, ctx);
     }
 
     public void rt(Object obj, Throwable t, String msg, Context ctx)
@@ -116,10 +129,22 @@ public class ExceptionService extends ServiceLocator.Service
         rt(obj, "", t, msg, ctx);
     }
 
+    public void rt(Object obj, Throwable t, int code, Context ctx)
+        throws CtxException
+    {
+        rt(obj, t, code, t.getMessage(), ctx);
+    }
+
     public void rt(Object obj, Throwable t, Context ctx)
         throws CtxException
     {
         rt(obj, t, t.getMessage(), ctx);
+    }
+
+    public void rt(Throwable t, int code, Context ctx)
+        throws CtxException
+    {
+        rt(null, t, code, t.getMessage(), ctx);
     }
 
     public void rt(Throwable t, Context ctx)
@@ -128,10 +153,26 @@ public class ExceptionService extends ServiceLocator.Service
         rt(null, t, t.getMessage(), ctx);
     }
 
+    public void rt(Throwable t, int code, String msg, Context ctx)
+        throws CtxException
+    {
+        rt(null, t, code, msg, ctx);
+    }
+
     public void rt(Throwable t, String msg, Context ctx)
         throws CtxException
     {
         rt(null, t, msg, ctx);
+    }
+
+    public void te(Object obj, String mthd, int code, String msg, Context ctx)
+        throws CtxException
+    {
+        Context[] actx = null;
+        if (ctx != null)
+            actx = new Context[] { ctx };
+        CtxException except = throwHandler(obj, mthd, null, msg, actx, code);
+        throw except;
     }
 
     public void te(Object obj, String mthd, String msg, Context ctx)
@@ -140,8 +181,14 @@ public class ExceptionService extends ServiceLocator.Service
         Context[] actx = null;
         if (ctx != null)
             actx = new Context[] { ctx };
-        CtxException except = throwHandler(obj, mthd, null, msg, actx);
+        CtxException except = throwHandler(obj, mthd, null, msg, actx, 0);
         throw except;
+    }
+
+    public void te(int code, String msg, Context ctx)
+        throws CtxException
+    {
+        te(null, "", code, msg, ctx);
     }
 
     public void te(String msg, Context ctx)
@@ -172,6 +219,18 @@ public class ExceptionService extends ServiceLocator.Service
         throws CtxException
     {
         te(obj, "", msg, null);
+    }
+
+    public void te(Object obj, int code, String msg)
+        throws CtxException
+    {
+        te(obj, "", code, msg, null);
+    }
+
+    public void te(int code, String msg)
+        throws CtxException
+    {
+        te(null, "", code, msg, null);
     }
 
     public void te(String msg)

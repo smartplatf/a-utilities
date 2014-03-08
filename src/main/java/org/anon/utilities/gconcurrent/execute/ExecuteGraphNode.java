@@ -120,9 +120,13 @@ public abstract class ExecuteGraphNode
         catch (InvocationTargetException ie)
         {
             String msg = ie.getMessage();
+            Throwable e = ie;
             if (ie.getCause() != null)
+            {
                 msg = ie.getCause().getMessage();
-            except().rt(ie, new CtxException.Context("Error: ", msg + ":" + _method.getName() + ":" + _clazz.getName()));
+                e = ie.getCause();
+            }
+            except().rt(e, new CtxException.Context("Error: ", msg + ":" + _method.getName() + ":" + _clazz.getName()));
 
         }
         catch (Exception e)

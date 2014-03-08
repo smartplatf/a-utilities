@@ -198,6 +198,20 @@ public class CreatorFromMap implements CVisitor
                 return l.longValue();
             }
 
+            if ((val != null) && (val.getClass().equals(Integer.class) || val.getClass().equals(Integer.TYPE)) 
+                    && (ctx.fieldType().equals(Double.TYPE) || ctx.fieldType().equals(Double.class)))
+            {
+                Double l = new Double(((Integer)val).doubleValue());
+                return l.doubleValue();
+            }
+
+            if ((val != null) && (val.getClass().equals(Integer.class) || val.getClass().equals(Integer.TYPE)) 
+                    && (ctx.fieldType().equals(Float.TYPE) || ctx.fieldType().equals(Float.class)))
+            {
+                Float l = new Float(((Integer)val).floatValue());
+                return l.floatValue();
+            }
+
             if ((val != null) && ((ctx.fieldType().equals(UUID.class)) || (ctx.fieldType().equals(Date.class))))
             {
                 Object ret = convert().stringToClass(val.toString(), ctx.fieldType());

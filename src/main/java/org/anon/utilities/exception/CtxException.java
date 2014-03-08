@@ -68,10 +68,12 @@ public class CtxException extends Exception implements Repeatable
 
     //This stores the current context from which the exception is thrown
     private List<Context> _ctx;
+    private int _code;
 
     public CtxException(Throwable t)
     {
         super(t);
+        addCode(t);
     }
 
     public CtxException(String msg)
@@ -82,6 +84,44 @@ public class CtxException extends Exception implements Repeatable
     public CtxException(String msg, Throwable t)
     {
         super(msg, t);
+        addCode(t);
+    }
+
+    public CtxException(int cde, Throwable t)
+    {
+        super(t);
+        _code = cde;
+        if (_code <= 0)
+            addCode(t);
+    }
+
+    public CtxException(int code, String msg)
+    {
+        super(msg);
+        _code = code;
+    }
+
+    public CtxException(int code, String msg, Throwable t)
+    {
+        super(msg, t);
+        _code = code;
+        if (_code <= 0)
+            addCode(t);
+    }
+
+    private void addCode(Throwable t)
+    {
+        try
+        {
+            if ((t != null) && (t.getLocalizedMessage() != null) && (!t.getLocalizedMessage().equals(t.getMessage())))
+            {
+                int cde = Integer.parseInt(t.getLocalizedMessage());
+                _code = cde;
+            }
+        }
+        catch (Exception e)
+        {
+        }
     }
 
     public void addContextData(String label, String value)
@@ -136,7 +176,15 @@ public class CtxException extends Exception implements Repeatable
     public Repeatable repeatMe(RepeaterVariants vars)
     {
         RepeatParms parms = (RepeatParms)vars;
-        return new CtxException(parms.message(), parms.throwable());
+        return new CtxException(parms.code(), parms.message(), parms.throwable());
+    }
+
+    public String getLocalizedMessage()
+    {
+        if (_code == 0)
+            return super.getLocalizedMessage();
+
+        return Integer.toString(_code);
     }
 }
 

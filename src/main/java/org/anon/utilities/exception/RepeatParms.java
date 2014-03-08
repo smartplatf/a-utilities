@@ -48,16 +48,19 @@ public class RepeatParms implements RepeaterVariants
     private String _method;
     private String _message;
     private Throwable _throwable;
+    private int _code;
 
-    public RepeatParms(String mthd, String msg, Throwable t)
+    public RepeatParms(String mthd, String msg, Throwable t, int code)
     {
         _method = mthd;
         _message = msg;
         _throwable = t;
+        _code = code;
     }
 
     public String method() { return _method; }
     public String message() { return _message; }
     public Throwable throwable() { return _throwable; }
+    public int code() { return _code; }
 }
 
