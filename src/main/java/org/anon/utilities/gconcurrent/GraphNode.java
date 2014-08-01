@@ -111,5 +111,10 @@ public class GraphNode implements java.io.Serializable
 
     public Method method() { return _method; }
     public Class clazz() { return _clazz; }
+
+    public String toString()
+    {
+        return _nodeName + ":" + ":" + _dependsOn;
+    }
 }
 

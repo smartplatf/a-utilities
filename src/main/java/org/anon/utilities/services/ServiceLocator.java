@@ -63,6 +63,7 @@ public class ServiceLocator
     private static final String ASSERTSVC = "org.anon.utilities.services.AssertionService";
     private static final String TYPESVC = "org.anon.utilities.services.TypeService";
     private static final String PERFSVC = "org.anon.utilities.services.PerformanceService";
+    private static final String JARSVC = "org.anon.utilities.services.JarService";
 
     public static final boolean DEVELOPMENT_BUILD = true;
 
@@ -75,6 +76,7 @@ public class ServiceLocator
         new AssertionService();
         new TypeService();
         new PerformanceService();
+        new JarService();
     }
 
     private ServiceLocator()
@@ -116,5 +118,9 @@ public class ServiceLocator
         return (PerformanceService)SERVICES.get(PERFSVC);
     }
 
+    public static JarService jar()
+    {
+        return (JarService)SERVICES.get(JARSVC);
+    }
 }
 

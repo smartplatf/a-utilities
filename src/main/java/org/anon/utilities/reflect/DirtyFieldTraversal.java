@@ -63,9 +63,13 @@ public class DirtyFieldTraversal extends ObjectTraversal
         throws CtxException
     {
     	if(cotraverse.length > 1)
-    		_dirtyFields = serial().dirtyFields(primary, cotraverse[1]);
+    		_dirtyFields = serial().oldwaydirtyFields(primary, cotraverse[1]);
     	else
-    		_dirtyFields = serial().dirtyFields(primary, cotraverse[0]);
+    		_dirtyFields = serial().oldwaydirtyFields(primary, cotraverse[0]);
+
+        //System.out.println("primary : " + primary);
+        //System.out.println("cotraverse : " + cotraverse[0]);
+        //System.out.println("Dirty: " + _dirtyFields);
         
         if(_dirtyFields != null){
         	System.out.println("-------------------------------------------");

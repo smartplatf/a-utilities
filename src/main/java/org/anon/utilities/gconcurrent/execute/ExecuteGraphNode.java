@@ -96,6 +96,7 @@ public abstract class ExecuteGraphNode
     private Object invokeExecute(Method mthd1, Object obj1, Object[] parms1)
         throws Exception
     {
+        System.out.println("Executing... " + mthd1.getName());
         Object obj = obj1;
         Method mthd = mthd1;
         Object[] parms = parms1;

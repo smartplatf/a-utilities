@@ -41,7 +41,9 @@
 
 package org.anon.utilities.test.reflect;
 
+import java.util.List;
 import java.util.Date;
+import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 
 import org.anon.utilities.fsm.StateEntity;
@@ -66,6 +68,7 @@ public class TestSmartObject implements java.io.Serializable, StateEntity
     private DataLegend ___smart_legend___;
     private String ___smart_name___;
     //private Date CreatedDate;
+    private List<Byte> password;
 
     public TestSmartObject()
         throws Exception
@@ -85,6 +88,16 @@ public class TestSmartObject implements java.io.Serializable, StateEntity
         //JavaDocURL = "";
         FiniteStateMachine mc = fsm().fsm("ComplexTestObject");
         if (mc != null) mc.start(this);
+
+        setPassword("testpassword");
+    }
+
+    public void setPassword(String val)
+    {
+        password = new ArrayList<Byte>();
+        byte[] bytes = val.getBytes();
+        for (int i = 0; i < bytes.length; i++)
+            password.add(bytes[i]);
     }
 
     public String utilities___stateEntityType()

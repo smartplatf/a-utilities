@@ -59,6 +59,8 @@ import org.anon.utilities.serialize.SerializerFactory;
 import org.anon.utilities.serialize.srdr.DirtyField;
 import org.anon.utilities.serialize.srdr.SerialStreamReader;
 import org.anon.utilities.serialize.srdr.StreamComparator;
+import org.anon.utilities.reflect.ChangedVisitor;
+import org.anon.utilities.reflect.ObjectTraversal;
 import org.anon.utilities.exception.CtxException;
 
 public class SerializerService extends ObjectServiceLocator.ObjectService
@@ -154,6 +156,28 @@ public class SerializerService extends ObjectServiceLocator.ObjectService
         }
 
         return ret;
+    }
+
+    public List<DirtyField> oldwaydirtyFields(Object obj, Object original)
+        throws CtxException
+    {
+        if ((obj == null) || (original == null))
+            return null;
+
+        try
+        {
+            ChangedVisitor cvisit = new ChangedVisitor();
+            ObjectTraversal traversal = new ObjectTraversal(cvisit, original, false, null, obj);
+            traversal.traverse();
+            System.out.println("Got Dirty as: " + cvisit.getDirtyFields());
+            return cvisit.getDirtyFields();
+        }
+        catch (Exception e)
+        {
+            except().rt(e, new CtxException.Context("SerializerService.serialize", "Exception"));
+        }
+
+        return null;
     }
 
     public List<DirtyField> dirtyFields(Object obj, Object original)

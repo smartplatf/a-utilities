@@ -81,6 +81,11 @@ public class Graph
     {
         return _nodes;
     }
+
+    public String toString()
+    {
+        return _nodes.toString();
+    }
 }
 
 

@@ -81,7 +81,7 @@ public class TestObjectTraversal
         return mc;
     }
 
-    @Test
+    //@Test
     public void testSimpleObjectTraversal()
         throws Exception
     {
@@ -116,7 +116,7 @@ public class TestObjectTraversal
         System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testComplexObjectTraversal()
         throws Exception
     {
@@ -164,7 +164,7 @@ public class TestObjectTraversal
         System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testListObjectTraversal()
         throws Exception
     {
@@ -205,7 +205,7 @@ public class TestObjectTraversal
         //System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testComplexListObjectTraversal()
         throws Exception
     {
@@ -260,7 +260,7 @@ public class TestObjectTraversal
         //System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testListListObjectTraversal()
         throws Exception
     {
@@ -318,7 +318,7 @@ public class TestObjectTraversal
         //System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testListSameListObjectTraversal()
         throws Exception
     {
@@ -376,7 +376,7 @@ public class TestObjectTraversal
         //System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testMapTraversal()
         throws Exception
     {
@@ -397,7 +397,7 @@ public class TestObjectTraversal
         //System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testObjectMapTraversal()
         throws Exception
     {
@@ -421,7 +421,7 @@ public class TestObjectTraversal
         //System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testComplexObjectMapTraversal()
         throws Exception
     {
@@ -445,7 +445,7 @@ public class TestObjectTraversal
         //System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testClassTraversal()
         throws Exception
     {
@@ -482,7 +482,7 @@ public class TestObjectTraversal
         System.out.println(ret);
     }
 
-    @Test
+    //@Test
     public void testClassCreation()
         throws Exception
     {
@@ -503,7 +503,7 @@ public class TestObjectTraversal
         System.out.println(ret);
     }
 
-    @Test
+    //@Test
     public void testchangeTraversal()
         throws Exception
     {
@@ -523,7 +523,7 @@ public class TestObjectTraversal
         //System.out.println(traversed);
     }
 
-    @Test
+    //@Test
     public void testcreateMap()
         throws Exception
     {
@@ -555,6 +555,7 @@ public class TestObjectTraversal
         TestSmartObject o1 = new TestSmartObject();
         TestSmartObject o2 = new TestSmartObject();
         mc.transition(o1, "state1");
+        o1.setPassword("testpassw0rd");
         System.out.println("State of o1 is: " + o1.utilities___currentState() + ":O2" + o2.utilities___currentState());
         Logger log = logger().glog("TestchangeTraversal");
         perf().startHere("testDirtyFieldTraversal");
@@ -667,7 +668,7 @@ public class TestObjectTraversal
         }
     }
 
-    @Test
+    //@Test
     public void testFinalCreate()
         throws Exception
     {

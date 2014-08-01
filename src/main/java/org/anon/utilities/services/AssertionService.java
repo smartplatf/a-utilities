@@ -120,6 +120,13 @@ public class AssertionService extends ServiceLocator.Service
         }
     }
 
+    public void assertNotNullWithCode(Object chk, int code, String msg)
+        throws CtxException
+    {
+        if (chk == null)
+            except().te(code, msg);
+    }
+
     public void assertNotNull(Object chk, String msg)
         throws CtxException
     {

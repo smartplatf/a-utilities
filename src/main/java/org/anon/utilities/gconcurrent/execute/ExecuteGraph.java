@@ -108,6 +108,7 @@ public abstract class ExecuteGraph implements Runnable, Repeatable
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             markNodeDone(rnde, true);
             except().rt(e, new CtxException.Context("Exception: ", ""));
         }
@@ -134,7 +135,7 @@ public abstract class ExecuteGraph implements Runnable, Repeatable
     private void markNodeDone(GraphRuntimeNode nde, boolean except)
         throws CtxException
     {
-        if (except) //means not going to progress further so mark them all done
+        if (except && (nde != null)) //means not going to progress further so mark them all done
         {
             List<GraphRuntimeNode> ndes = nde.blockedNodes();
             for (int i = 0; (ndes != null) && (i < ndes.size()); i++)
